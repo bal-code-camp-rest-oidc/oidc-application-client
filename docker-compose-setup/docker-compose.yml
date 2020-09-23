@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  #
+  # MySQL
+  #
+  # https://docs.docker.com/samples/library/mysql/#-via-docker-stack-deploy-or-docker-compose
+  # https://severalnines.com/blog/mysql-docker-composing-stack
+  mysql:
+    image: mysql:8.0.21
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d:ro
+      - ./mysql/logs:/var/log/mysql:rw
+      - ./mysql/data:/var/lib/mysql:rw
+    ports:
+     - 3310:3310
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=20mysql20
+      - TZ=Europe/Zurich
+    networks:
+      - agn-network
+
+  #
+  # Keycloak
+  #
+  keycloak:
+    image: jboss/keycloak:11.0.2
+    depends_on:
+      - mysql
+    restart: always
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_PORT: 3310
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      JDBC_PARAMS: "useSSL=false&serverTimezone=Europe/Zurich"
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /data/keycloak_realm_workshop.json
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 9990:9990
+    volumes:
+      - ./keycloak/data:/data
+    links:
+      - mysql
+    networks:
+      - agn-network
+
+networks:
+  agn-network:
+    driver: bridge
