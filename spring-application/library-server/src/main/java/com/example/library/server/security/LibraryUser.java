@@ -1,6 +1,5 @@
 package com.example.library.server.security;
 
-import com.example.library.server.dataaccess.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

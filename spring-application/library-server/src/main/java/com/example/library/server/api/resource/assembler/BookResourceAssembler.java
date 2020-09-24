@@ -3,7 +3,6 @@ package com.example.library.server.api.resource.assembler;
 import com.example.library.server.api.BookRestController;
 import com.example.library.server.api.resource.BookResource;
 import com.example.library.server.dataaccess.Book;
-import com.example.library.server.dataaccess.User;
 import com.example.library.server.security.LibraryUser;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;

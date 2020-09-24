@@ -3,7 +3,6 @@ package com.example.library.server.api.resource.assembler;
 import com.example.library.server.api.UserRestController;
 import com.example.library.server.api.resource.ModifyingUserResource;
 import com.example.library.server.api.resource.UserResource;
-import com.example.library.server.dataaccess.User;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,7 @@ public class UserResourceAssembler extends RepresentationModelAssemblerSupport<U
   public UserResource toModel(User user) {
     UserResource userResource = new UserResource(user);
     userResource.add(
-        linkTo(methodOn(UserRestController.class).getUser(user.getIdentifier())).withSelfRel());
+        linkTo(methodOn(UserRestController.class).getUser(user.getUserId())).withSelfRel());
     return userResource;
   }
 

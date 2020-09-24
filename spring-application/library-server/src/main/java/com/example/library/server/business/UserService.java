@@ -1,6 +1,5 @@
 package com.example.library.server.business;
 
-import com.example.library.server.dataaccess.User;
 import com.example.library.server.dataaccess.UserRepository;
 import com.example.library.server.security.PreAuthorizeNotRequired;
 import org.springframework.beans.factory.annotation.Autowired;

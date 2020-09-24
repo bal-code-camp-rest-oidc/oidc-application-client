@@ -4,17 +4,17 @@ allowing maintaining and borrowing books depending on the user's role.
 
 # Components
 ## Overview
-    +---------------+      +----------+
-    | BookService   +------+          |
-    +-------+-------+      |          |
-            |              | Library  |
-    +-------+-------+      |  Client  |      +---------------+
-    | BorrowService +------+   REST   +------+ LibraryClient |
-    +-------+-------+      |  Server  |      +---------------+
-            |              |          |
-    +-------+-------+      |          |
-    | KCUserService +------+          |
-    +---------------+      +----------+
+    +------------------+      +----------+
+    | InventoryService +------+          |
+    +-------+----------+      |          |
+            |                 |          |
+    +-------+----------+      |          |      +---------------+
+    | BorrowService    +------+ Library  +------+ LibraryClient |
+    +-------+----------+      | Server   |      +---------------+
+            |                 |          |
+    +-------+----------+      |          |
+    | UserService      +------+          |
+    +------------------+      +----------+
 
 ## Library Client
 Web interface
@@ -29,5 +29,5 @@ Provides access to the registry of (available) books.
 ## Borrow Service
 Keeps record of who borrowed which book.
 
-## User / Keycloak Service
+## User Service
 Provides access to a list of authorized users.

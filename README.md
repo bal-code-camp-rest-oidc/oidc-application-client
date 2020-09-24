@@ -17,6 +17,7 @@ The following sub projects are part of this repo:
 The following images are part of this project 
 - mysql 8.0.21
 - keycloak 11.0.2
+- ApacheDS
 
 You can *start* the project the following way:
 ```

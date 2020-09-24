@@ -1,6 +1,5 @@
 package com.example.library.server.api.resource;
 
-import com.example.library.server.dataaccess.User;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Email;

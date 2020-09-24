@@ -4,7 +4,6 @@ import com.example.library.server.api.resource.ModifyingUserResource;
 import com.example.library.server.api.resource.UserResource;
 import com.example.library.server.api.resource.assembler.UserResourceAssembler;
 import com.example.library.server.business.UserService;
-import com.example.library.server.dataaccess.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
