@@ -35,3 +35,4 @@ bin/
 
 # docker compose images
 /docker-compose-setup/mysql/data/
+/docker-compose-setup/apacheds/data/
