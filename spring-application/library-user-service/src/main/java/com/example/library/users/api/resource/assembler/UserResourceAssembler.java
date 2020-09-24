@@ -1,7 +1,6 @@
 package com.example.library.users.api.resource.assembler;
 
 import com.example.library.users.api.UserRestController;
-import com.example.library.users.api.resource.ModifyingUserResource;
 import com.example.library.users.api.resource.UserResource;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Component;

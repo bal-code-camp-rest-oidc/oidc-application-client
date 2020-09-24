@@ -10,7 +10,6 @@ import ch.baloise.keycloak.client.admin.api.User;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {

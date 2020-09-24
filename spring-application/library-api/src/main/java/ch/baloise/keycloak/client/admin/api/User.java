@@ -1,8 +1,5 @@
 package ch.baloise.keycloak.client.admin.api;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,24 +7,14 @@ import java.util.UUID;
 
 public class User {
 
-    @NotNull
     private UUID identifier;
 
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Email
     private String email;
 
-    @NotNull
-    @Size(min = 1, max = 100)
     private String firstName;
 
-    @NotNull
-    @Size(min = 1, max = 100)
     private String lastName;
 
-    @NotNull
-    @Size(min = 1, max = 100)
     private String userId;
 
     private List<String> roles = new ArrayList<>();

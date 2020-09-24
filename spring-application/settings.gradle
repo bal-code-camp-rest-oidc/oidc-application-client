@@ -1,4 +1,5 @@
 include 'keycloak-client'
+include 'library-api'
 include 'library-borrow-service'
 include 'library-client'
 include 'library-inventory-service'
@@ -6,3 +7,4 @@ include 'library-server'
 include 'library-user-service'
 
 rootProject.name = 'spring-application'
+
