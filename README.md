@@ -8,9 +8,11 @@ Project that contains API and samples that helps to work with OIDC, keycloak, JW
 ## Sub-Projects
 The following sub projects are part of this repo:
 
-0. ```docker-compose-setup```:
-   docker compose providing mysql as a permanent DB store and keycloak
-   
+0. `docker-compose-setup`<br/>
+*docker compose providing mysql as a permanent DB store and keycloak*
+0. `spring-application`<br/>
+*library client spring application*
+
 ### docker-compose-setup
 The following images are part of this project 
 - mysql 8.0.21
