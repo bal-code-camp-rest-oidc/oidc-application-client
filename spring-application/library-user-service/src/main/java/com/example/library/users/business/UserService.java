@@ -1,12 +1,10 @@
 package com.example.library.users.business;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.util.IdGenerator;
-
+import ch.baloise.keycloak.client.admin.KeycloakAdminFacade;
 import ch.baloise.keycloak.client.admin.KeycloakAdminFacadeImpl;
 import ch.baloise.keycloak.client.admin.api.User;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,18 +12,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final KeycloakAdminFacadeImpl userRepository;
-    private final IdGenerator idGenerator;
+    private final KeycloakAdminFacade userRepository;
 
-    @Autowired
-    public UserService(KeycloakAdminFacadeImpl userRepository, IdGenerator idGenerator) {
-        this.userRepository = userRepository;
-        this.idGenerator = idGenerator;
+    public UserService() {
+        this.userRepository = new KeycloakAdminFacadeImpl();
+        userRepository.connect("http://localhost:8080/auth", "workshop", "keycloak-admin", "ab14c208-a2ee-47a9-9fd5-04c93cc61a2a");
     }
 
     public Optional<User> findUserByEmail(String email) {
         List<User> result = userRepository.findUsersByMail(email, 0, 10);
-
         return Optional.of(result.get(0));
     }
 
@@ -33,8 +28,6 @@ public class UserService {
         return userRepository.getUserById(userId);
     }
 
-
-    @PreAuthorize("hasRole('LIBRARY_ADMIN')")
     public List<User> findAll() {
         return userRepository.findUsersByMail("", 0, 100);
     }
