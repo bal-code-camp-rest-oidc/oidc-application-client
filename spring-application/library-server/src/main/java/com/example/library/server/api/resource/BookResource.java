@@ -1,7 +1,7 @@
 package com.example.library.server.api.resource;
 
+import com.example.library.inventory.dataaccess.Book;
 import com.example.library.server.api.resource.assembler.UserResourceAssembler;
-import com.example.library.server.dataaccess.Book;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;

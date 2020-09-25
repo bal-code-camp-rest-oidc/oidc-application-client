@@ -1,8 +1,9 @@
 package com.example.library.server.api.resource.assembler;
 
+import ch.baloise.keycloak.client.admin.api.User;
+import ch.baloise.keycloak.client.admin.api.Book;
 import com.example.library.server.api.BookRestController;
 import com.example.library.server.api.resource.BookResource;
-import com.example.library.server.dataaccess.Book;
 import com.example.library.server.security.LibraryUser;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -24,20 +25,20 @@ public class BookResourceAssembler extends RepresentationModelAssemblerSupport<B
     BookResource bookResource = new BookResource(book);
     bookResource.add(
         linkTo(methodOn(BookRestController.class).getBookById(book.getIdentifier())).withSelfRel());
-      bookResource.add(
-          linkTo(
-                  methodOn(BookRestController.class)
-                      .updateBook(book.getIdentifier(), new BookResource()))
-              .withRel("update"));
     bookResource.add(
         linkTo(
-                methodOn(BookRestController.class)
-                    .borrowBookById(book.getIdentifier(), new LibraryUser(new User())))
+            methodOn(BookRestController.class)
+                .updateBook(book.getIdentifier(), new BookResource()))
+            .withRel("update"));
+    bookResource.add(
+        linkTo(
+            methodOn(BookRestController.class)
+                .borrowBookById(book.getIdentifier(), new LibraryUser(new User())))
             .withRel("borrow"));
     bookResource.add(
         linkTo(
-                methodOn(BookRestController.class)
-                    .returnBookById(book.getIdentifier(), new LibraryUser(new User())))
+            methodOn(BookRestController.class)
+                .returnBookById(book.getIdentifier(), new LibraryUser(new User())))
             .withRel("return"));
     return bookResource;
   }
@@ -46,9 +47,9 @@ public class BookResourceAssembler extends RepresentationModelAssemblerSupport<B
   public CollectionModel<BookResource> toCollectionModel(Iterable<? extends Book> entities) {
     CollectionModel<BookResource> bookResources = super.toCollectionModel(entities);
     bookResources.add(
-            linkTo(methodOn(BookRestController.class).getAllBooks()).withSelfRel(),
-            linkTo(methodOn(BookRestController.class).createBook(new BookResource()))
-                    .withRel("create"));
+        linkTo(methodOn(BookRestController.class).getAllBooks()).withSelfRel(),
+        linkTo(methodOn(BookRestController.class).createBook(new BookResource()))
+            .withRel("create"));
     return bookResources;
   }
 
