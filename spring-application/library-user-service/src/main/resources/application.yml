@@ -34,7 +34,7 @@ server:
 library:
   server:
     keycloak:
-      serverUrl: ${KEYCLOAK_SERVER_URL}
+      serverUrl: ${KEYCLOAK_SERVER_URI}
       realmId: ${KEYCLOAK_REALM_ID}
-      clientId: ${KEYCLOAK_CLIENT_ID}
+      clientId: ${CLIENT_ID}
       clientSecret: ${KEYCLOAK_CLIENT_SECRET}
