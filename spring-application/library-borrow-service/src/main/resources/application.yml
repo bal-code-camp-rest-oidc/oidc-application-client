@@ -30,3 +30,7 @@ server:
   port: 9091
   servlet:
     context-path: /library-borrow
+
+library:
+  user-srv: ${USER_SERVICE_URI}
+  inventory-srv: ${INVENTORY_SERVICE_URI}
