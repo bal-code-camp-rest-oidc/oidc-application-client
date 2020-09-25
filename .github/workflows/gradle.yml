@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Build with Gradle
-        run: gradle :library-inventory-service:bootBuildImage
+        run: cd spring-application && gradle :library-inventory-service:bootBuildImage && cd ..
       - uses: actions/checkout@v1
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -43,7 +43,7 @@ jobs:
 #      with:
 #        java-version: ${{ matrix.java }}
 #    - name: Build with Gradle
-#      run: gradle :library-borrow-service:bootBuildImage
+#      run: cd spring-application && gradle :library-borrow-service:bootBuildImage && cd ..
 #    - uses: actions/checkout@v1
 #    - name: Login to DockerHub Registry
 #      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -70,7 +70,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Gradle
-      run: gradle :library-client:bootBuildImage
+      run: cd spring-application && gradle :library-client:bootBuildImage && cd ..
     - uses: actions/checkout@v1
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -97,7 +97,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Gradle
-      run: gradle :library-server:bootBuildImage
+      run: cd spring-application && gradle :library-server:bootBuildImage && cd ..
     - uses: actions/checkout@v1
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -124,7 +124,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Gradle
-      run: gradle :library-user-server:bootBuildImage
+      run: cd spring-application && gradle :library-user-server:bootBuildImage && cd ..
     - uses: actions/checkout@v1
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
