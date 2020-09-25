@@ -21,11 +21,6 @@ public class UserService {
         userRepository.connect(properties.getServerUrl(), properties.getRealmId(), properties.getClientId(), properties.getClientSecret());
     }
 
-    public Optional<User> findUserByEmail(String email) {
-        List<User> result = userRepository.findUsersByMail(email, 0, 10);
-        return Optional.of(result.get(0));
-    }
-
     public Optional<User> getUserById(String userId) {
         return userRepository.getUserById(userId);
     }

@@ -29,7 +29,7 @@ public class UserRestController {
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public List<UserResource> getAllUsers() {
-    return userService.findUserByEmail("").stream()
+    return userService.findAll().stream()
         .map(userResourceAssembler::toModel)
         .collect(Collectors.toList());
   }

@@ -80,7 +80,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
         RealmResource realmResource = keycloak.realm(realmId);
         UsersResource usersResource = realmResource.users();
         for (UserRepresentation currentUserRepresentation : usersResource.search(emailAddress, offset, maxAmount)) {
-            outUsers.add(new UserMapper().map(currentUserRepresentation));
+            outUsers.add(UserMapper.map(currentUserRepresentation));
         }
         return outUsers;
     }
@@ -113,7 +113,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
                     .roles()
                     .get(roleId);
             for (UserRepresentation currentUser : roleResource.getRoleUserMembers()) {
-                outUsers.add(new UserMapper().map(currentUser));
+                outUsers.add(UserMapper.map(currentUser));
             }
         } catch (NotFoundException notFoundProblem) {
             //nothing found

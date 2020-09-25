@@ -1,13 +1,11 @@
 package ch.baloise.keycloak.client.admin;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 /**
- * Provides several tests to ensure that we have proper functionality in ourt facade.
+ * Provides several tests to ensure that we have proper functionality in our facade.
  */
+@Ignore("Just for local testing")
 public class KeycloakAdminTest {
 
     private static final String SERVER_URL = "http://localhost:8080/auth";
