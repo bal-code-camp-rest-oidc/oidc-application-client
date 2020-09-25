@@ -124,7 +124,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Gradle
-      run: cd spring-application && gradle :library-user-server:bootBuildImage && cd ..
+      run: cd spring-application && gradle :library-user-service:bootBuildImage && cd ..
     - uses: actions/checkout@v1
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
