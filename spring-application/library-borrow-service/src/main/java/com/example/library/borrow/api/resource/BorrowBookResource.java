@@ -13,7 +13,7 @@ public class BorrowBookResource extends RepresentationModel<BorrowBookResource> 
 
     private UserResource borrowedBy;
 
-    private BookResource borrowedBook;
+    private BookResource borrowBook;
 
     public BorrowBookResource() {
     }
@@ -21,7 +21,7 @@ public class BorrowBookResource extends RepresentationModel<BorrowBookResource> 
     public BorrowBookResource(BorrowBook borrowBook) {
         this(
                 borrowBook.getBook() != null
-                        ? new BorrowedBookResourceAssembler().toModel(borrowBook.getBook())
+                        ? new BorrowBookResourceAssembler().toModel(borrowBook.getBook())
                         : null),
                 borrowBook.getBorrowedBy() != null
                         ? new UserResourceAssembler().toModel(borrowBook.getBorrowedBy())
@@ -29,68 +29,9 @@ public class BorrowBookResource extends RepresentationModel<BorrowBookResource> 
     }
 
     public BorrowBookResource(
-            UUID identifier,
-            String isbn,
-            String title,
-            String description,
-            List<String> authors,
-            boolean borrowed,
-            UserResource borrowedBy) {
-        this.identifier = identifier;
-        this.isbn = isbn;
-        this.title = title;
-        this.description = description;
-        this.authors = authors;
-        this.borrowed = borrowed;
+            BorrowBookResource borrowBook, UserResource borrowedBy) {
+        this.borrowBook = borrowBook;
         this.borrowedBy = borrowedBy;
-    }
-
-    public UUID getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(UUID identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<String> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<String> authors) {
-        this.authors = authors;
-    }
-
-    public boolean isBorrowed() {
-        return borrowed;
-    }
-
-    public void setBorrowed(boolean borrowed) {
-        this.borrowed = borrowed;
     }
 
     public UserResource getBorrowedBy() {
@@ -101,47 +42,34 @@ public class BorrowBookResource extends RepresentationModel<BorrowBookResource> 
         this.borrowedBy = borrowedBy;
     }
 
+    public BorrowBookResource getBorrowBook() {
+        return borrowBook;
+    }
+
+    public void setBorrowBook(BorrowBookResource borrowBook) {
+        this.borrowBook = borrowBook;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         BorrowBookResource that = (BorrowBookResource) o;
-        return borrowed == that.borrowed
-                && identifier.equals(that.identifier)
-                && isbn.equals(that.isbn)
-                && title.equals(that.title)
-                && description.equals(that.description)
-                && authors.equals(that.authors)
-                && Objects.equals(borrowedBy, that.borrowedBy);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                super.hashCode(), identifier, isbn, title, description, authors, borrowed, borrowedBy);
+        return borrowedBy.equals(that.borrowedBy) &&
+                borrowBook.equals(that.borrowBook);
     }
 
     @Override
     public String toString() {
-        return "BookResource{"
-                + "identifier="
-                + identifier
-                + ", isbn='"
-                + isbn
-                + '\''
-                + ", title='"
-                + title
-                + '\''
-                + ", description='"
-                + description
-                + '\''
-                + ", authors="
-                + authors
-                + ", borrowed="
-                + borrowed
-                + ", borrowedBy="
-                + borrowedBy
-                + '}';
+        return "BorrowBookResource{" +
+                "borrowedBy=" + borrowedBy +
+                ", borrowBook=" + borrowBook +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), borrowedBy, borrowBook);
     }
 }
