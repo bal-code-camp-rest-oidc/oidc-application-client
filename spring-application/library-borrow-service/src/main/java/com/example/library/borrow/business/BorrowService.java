@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,16 +22,12 @@ public class BorrowService {
 
   @Transactional
   @PreAuthorize("hasRole('LIBRARY_USER')")
-  public UUID borrowById(UUID bookIdentifier, String userId) {
-
+  public void borrowById(UUID bookIdentifier, String userId) {
     if (bookIdentifier == null || userId == null) {
       throw new IllegalArgumentException("missing book or user ID");
     }
 
-    UUID borrowBookId = UUID.randomUUID();
-    borrowBookRepository.save(new BorrowBookEntity(borrowBookId, bookIdentifier, userId));
-
-    return borrowBookId;
+    borrowBookRepository.save(new BorrowBookEntity(bookIdentifier, userId));
   }
 
   @Transactional
@@ -42,5 +39,15 @@ public class BorrowService {
     }
 
     borrowBookRepository.deleteBookByIdentifier(borrowBookId);
+  }
+
+
+  @Transactional
+  @PreAuthorize("hasRole('LIBRARY_USER')")
+  public Optional<String> getBorrowerByBook(UUID borrowBookId) {
+    String user = borrowBookRepository.findOneByIdentifier(borrowBookId)
+                      .map(BorrowBookEntity::getUserId)
+                      .orElse(null);
+    return user == null ? Optional.empty() : Optional.of(user);
   }
 }

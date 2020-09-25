@@ -130,10 +130,21 @@ public class BookService {
   }
 
   private void doReturn(Book book, User user) {
-    if (book.isBorrowed()) {
-      if (book.getBorrowedBy().equals(user)) {
-        book.setBorrowed(false);
-        book.setBorrowedBy(null);
+    RestTemplate restTemplate = new RestTemplateBuilder()
+                                    // todo auth
+                                    .rootUri(borrowServiceUri)
+                                    .build();
+    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
+
+    if (borrowedBy != null && !borrowedBy.equals("")) {
+      if (user.getIdentifier().equals(UUID.fromString(borrowedBy))) {
+
+
+        RestTemplate bookRestTemplate = new RestTemplateBuilder()
+                                            // todo auth
+                                            .rootUri(bookServiceUri)
+                                            .build();
+        bookRestTemplate.delete("/borrowBooks/" + book.getIdentifier());
       } else {
         throw new AccessDeniedException(
             String.format(
@@ -143,9 +154,18 @@ public class BookService {
   }
 
   private void doBorrow(Book book, User user) {
-    if (!book.isBorrowed()) {
-      book.setBorrowed(true);
-      book.setBorrowedBy(user);
+    RestTemplate restTemplate = new RestTemplateBuilder()
+                                    // todo auth
+                                    .rootUri(borrowServiceUri)
+                                    .build();
+    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
+
+    if (borrowedBy == null || borrowedBy.equals("")) {
+      RestTemplate borrowRestTemplate = new RestTemplateBuilder()
+                                            // todo auth
+                                            .rootUri(borrowServiceUri)
+                                            .build();
+      borrowRestTemplate.postForEntity("/borrowBooks/" + book.getIdentifier(), user, String.class);
     }
   }
 }
