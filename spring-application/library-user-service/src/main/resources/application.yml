@@ -16,8 +16,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
-          issuer-uri: http://localhost:8080/auth/realms/workshop
+          jwk-set-uri: ${JWK_SET_URI}
+          issuer-uri: ${ISSUER_URI}
 
 logging:
   level:
@@ -34,7 +34,7 @@ server:
 library:
   server:
     keycloak:
-      serverUrl: ${KEYCLOAK_SERVER_URL}
+      serverUrl: ${KEYCLOAK_SERVER_URI}
       realmId: ${KEYCLOAK_REALM_ID}
-      clientId: ${KEYCLOAK_CLIENT_ID}
+      clientId: ${CLIENT_ID}
       clientSecret: ${KEYCLOAK_CLIENT_SECRET}

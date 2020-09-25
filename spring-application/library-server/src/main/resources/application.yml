@@ -16,8 +16,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
-          issuer-uri: http://localhost:8080/auth/realms/workshop
+          jwk-set-uri: ${JWK_SET_URI}
+          issuer-uri: ${ISSUER_URI}
 
 logging:
   level:
@@ -27,6 +27,11 @@ logging:
 server:
   error:
     include-stacktrace: never
-  port: 9091
+  port: 9090
   servlet:
     context-path: /library-server
+
+library:
+  user-srv: ${USER_SERVICE_URI}
+  inventory-srv: ${INVENTORY_SERVICE_URI}
+  borrow-srv: ${BORROW_SERVICE_URI}
