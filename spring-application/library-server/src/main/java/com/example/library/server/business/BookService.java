@@ -1,8 +1,7 @@
 package com.example.library.server.business;
 
-import com.example.library.server.dataaccess.Book;
-import com.example.library.server.dataaccess.BookRepository;
-import com.example.library.server.dataaccess.UserRepository;
+import ch.baloise.keycloak.client.admin.api.Book;
+import com.example.library.inventory.dataaccess.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;

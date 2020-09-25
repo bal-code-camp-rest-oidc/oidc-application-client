@@ -1,25 +1,17 @@
 package com.example.library.server.api;
 
+import ch.baloise.keycloak.client.admin.api.User;
+import ch.baloise.keycloak.client.admin.api.Book;
 import com.example.library.server.api.resource.BookResource;
 import com.example.library.server.api.resource.assembler.BookResourceAssembler;
 import com.example.library.server.business.BookService;
-import com.example.library.server.dataaccess.Book;
-import com.example.library.server.security.LibraryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -56,7 +48,7 @@ public class BookRestController {
 
   @PostMapping("/{bookId}/borrow")
   public ResponseEntity<BookResource> borrowBookById(
-      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal LibraryUser libraryUser) {
+      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal User libraryUser) {
     return bookService
         .findByIdentifier(bookId)
         .map(
@@ -72,7 +64,7 @@ public class BookRestController {
 
   @PostMapping("/{bookId}/return")
   public ResponseEntity<BookResource> returnBookById(
-      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal LibraryUser libraryUser) {
+      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal User libraryUser) {
     return bookService
         .findByIdentifier(bookId)
         .map(
