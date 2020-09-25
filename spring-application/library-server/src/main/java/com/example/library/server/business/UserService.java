@@ -1,6 +1,6 @@
 package com.example.library.server.business;
 
-import com.example.library.server.dataaccess.UserRepository;
+import ch.baloise.keycloak.client.admin.api.User;
 import com.example.library.server.security.PreAuthorizeNotRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +25,6 @@ public class UserService {
     this.idGenerator = idGenerator;
   }
 
-  // This has to be unsecured as this is used to
-  // look up the user during authentication
-  @PreAuthorizeNotRequired
   public Optional<User> findOneByEmail(String email) {
     return userRepository.findOneByEmail(email);
   }

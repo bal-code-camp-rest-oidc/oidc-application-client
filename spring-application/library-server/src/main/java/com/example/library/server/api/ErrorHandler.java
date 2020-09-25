@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<String> handle(RuntimeException ex) {
     Logger logger = LoggerFactory.getLogger(this.getClass());

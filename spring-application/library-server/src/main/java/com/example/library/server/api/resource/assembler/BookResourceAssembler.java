@@ -1,10 +1,9 @@
 package com.example.library.server.api.resource.assembler;
 
-import ch.baloise.keycloak.client.admin.api.User;
 import ch.baloise.keycloak.client.admin.api.Book;
+import ch.baloise.keycloak.client.admin.api.User;
 import com.example.library.server.api.BookRestController;
 import com.example.library.server.api.resource.BookResource;
-import com.example.library.server.security.LibraryUser;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -33,12 +32,12 @@ public class BookResourceAssembler extends RepresentationModelAssemblerSupport<B
     bookResource.add(
         linkTo(
             methodOn(BookRestController.class)
-                .borrowBookById(book.getIdentifier(), new LibraryUser(new User())))
+                .borrowBookById(book.getIdentifier(), new User()))
             .withRel("borrow"));
     bookResource.add(
         linkTo(
             methodOn(BookRestController.class)
-                .returnBookById(book.getIdentifier(), new LibraryUser(new User())))
+                .returnBookById(book.getIdentifier(), new User()))
             .withRel("return"));
     return bookResource;
   }
