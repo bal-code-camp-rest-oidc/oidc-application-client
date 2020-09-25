@@ -12,35 +12,35 @@ import java.util.UUID;
 @Service
 public class BorrowService {
 
-    private final BorrowBookRepository borrowBookRepository;
+  private final BorrowBookRepository borrowBookRepository;
 
-    @Autowired
-    public BorrowService(BorrowBookRepository borrowBookRepository) {
-        this.borrowBookRepository = borrowBookRepository;
+  @Autowired
+  public BorrowService(BorrowBookRepository borrowBookRepository) {
+    this.borrowBookRepository = borrowBookRepository;
+  }
+
+  @Transactional
+  @PreAuthorize("hasRole('LIBRARY_USER')")
+  public UUID borrowById(UUID bookIdentifier, String userId) {
+
+    if (bookIdentifier == null || userId == null) {
+      throw new IllegalArgumentException("missing book or user ID");
     }
 
-    @Transactional
-    @PreAuthorize("hasRole('LIBRARY_USER')")
-    public UUID borrowById(UUID bookIdentifier, String userId) {
+    UUID borrowBookId = UUID.randomUUID();
+    borrowBookRepository.save(new BorrowBookEntity(borrowBookId, bookIdentifier, userId));
 
-        if (bookIdentifier == null || userId == null) {
-            throw new IllegalArgumentException("missing book or user ID");
-        }
+    return borrowBookId;
+  }
 
-        UUID borrowBookId = UUID.randomUUID();
-        borrowBookRepository.save(new BorrowBookEntity(borrowBookId, bookIdentifier, userId));
+  @Transactional
+  @PreAuthorize("hasRole('LIBRARY_USER')")
+  public void returnById(UUID borrowBookId) {
 
-        return borrowBookId;
+    if (borrowBookId == null) {
+      throw new IllegalArgumentException("missing borrow book ID");
     }
 
-    @Transactional
-    @PreAuthorize("hasRole('LIBRARY_USER')")
-    public void returnById(UUID borrowBookId) {
-
-        if (borrowBookId == null) {
-            throw new IllegalArgumentException("missing borrow book ID");
-        }
-
-        borrowBookRepository.deleteBookByIdentifier(borrowBookId);
-    }
+    borrowBookRepository.deleteBookByIdentifier(borrowBookId);
+  }
 }

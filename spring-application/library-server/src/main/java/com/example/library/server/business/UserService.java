@@ -1,12 +1,15 @@
 package com.example.library.server.business;
 
 import ch.baloise.keycloak.client.admin.api.User;
-import com.example.library.server.security.PreAuthorizeNotRequired;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.IdGenerator;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,47 +19,36 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class UserService {
 
-  private final UserRepository userRepository;
-  private final IdGenerator idGenerator;
-
-  @Autowired
-  public UserService(UserRepository userRepository, IdGenerator idGenerator) {
-    this.userRepository = userRepository;
-    this.idGenerator = idGenerator;
-  }
-
-  public Optional<User> findOneByEmail(String email) {
-    return userRepository.findOneByEmail(email);
-  }
-
-  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  @Transactional
-  public UUID create(User user) {
-    if (user.getIdentifier() == null) {
-      user.setIdentifier(idGenerator.generateId());
-    }
-    return userRepository.save(user).getIdentifier();
-  }
-
-  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  @Transactional
-  public User update(User user) {
-    return userRepository.save(user);
-  }
+  @Value("library.user-srv")
+  private String userServiceUri;
 
   @PreAuthorize("hasRole('LIBRARY_ADMIN')")
   public Optional<User> findByIdentifier(UUID userIdentifier) {
-    return userRepository.findOneByIdentifier(userIdentifier);
+    RestTemplate restTemplate = new RestTemplateBuilder()
+                                    // todo auth
+                                    .rootUri(userServiceUri)
+                                    .build();
+
+    ResponseEntity<User> response = restTemplate.exchange(
+        userIdentifier.toString(), HttpMethod.GET, null,
+        new ParameterizedTypeReference<User>() {
+        });
+
+    return response.getBody() == null ? Optional.empty() : Optional.of(response.getBody());
   }
 
   @PreAuthorize("hasRole('LIBRARY_ADMIN')")
   public List<User> findAll() {
-    return userRepository.findAll();
-  }
+    RestTemplate restTemplate = new RestTemplateBuilder()
+                                    .rootUri(userServiceUri)
+                                    // todo auth
+                                    .build();
 
-  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  @Transactional
-  public void deleteByIdentifier(UUID userIdentifier) {
-    userRepository.deleteUserByIdentifier(userIdentifier);
+    ResponseEntity<List<User>> response = restTemplate.exchange(
+        "", HttpMethod.GET, null,
+        new ParameterizedTypeReference<List<User>>() {
+        });
+
+    return response.getBody();
   }
 }
