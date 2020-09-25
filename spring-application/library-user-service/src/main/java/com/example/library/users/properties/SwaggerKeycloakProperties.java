@@ -1,30 +1,18 @@
-package com.example.library.users;
+package com.example.library.users.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Provides all properties as described in the application.yml to access the proper client.
+ */
 @Component
-@ConfigurationProperties("library.server.keycloak")
-public class KeycloakProperties {
-    private String serverUrl;
-
-    private String realmId;
+@ConfigurationProperties("swagger.keycloak")
+public class SwaggerKeycloakProperties {
 
     private String clientId;
 
     private String clientSecret;
-
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public String getRealmId() {
-        return realmId;
-    }
-
-    public void setRealmId(String realmId) {
-        this.realmId = realmId;
-    }
 
     public String getClientId() {
         return clientId;
@@ -40,9 +28,5 @@ public class KeycloakProperties {
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
     }
 }

@@ -6,6 +6,7 @@ management:
   endpoint:
     health:
       show-details: always
+
 spring:
   jpa:
     open-in-view: false
@@ -24,6 +25,7 @@ logging:
     org:
       springframework:
         security: debug
+
 server:
   error:
     include-stacktrace: never
@@ -38,3 +40,21 @@ library:
       realmId: ${KEYCLOAK_REALM_ID}
       clientId: ${CLIENT_ID}
       clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+
+# Properties provided by com.example.library.users.properties.SwaggerProperties
+swagger:
+  keycloak:
+    clientId: ${SWAGGER_CLIENT_ID}
+    clientSecret: ${SWAGGER_CLIENT_SECRET}
+  api-info:
+    title: "OIDC Sample: User Service"
+    description: "This service provides basic access to user information as it is stored in the Keyclkoak server."
+    version: "1.0.0"
+    termsOfServiceUrl: "http://www.baloise.ch/terms-of-service"
+    license: "Apache 2.0"
+    licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0"
+    contact:
+      name: "John Doe"
+      url: "http://www.baloise.ch"
+      email: "john.doe@baloise.ch"
+

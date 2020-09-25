@@ -6,6 +6,7 @@ management:
   endpoint:
     health:
       show-details: always
+
 spring:
   jpa:
     open-in-view: false
@@ -24,6 +25,7 @@ logging:
     org:
       springframework:
         security: debug
+
 server:
   error:
     include-stacktrace: never
@@ -38,3 +40,20 @@ library:
       realmId: workshop
       clientId: keycloak-admin
       clientSecret: ab14c208-a2ee-47a9-9fd5-04c93cc61a2a
+
+swagger:
+  keycloak:
+    clientId: library-client
+    clientSecret: 9584640c-3804-4dcd-997b-93593cfb9ea7
+  api-info:
+    title: "OIDC Sample: User Service"
+    description: "This service provides basic access to user information as it is stored in the Keyclkoak server."
+    version: "1.0.0"
+    termsOfServiceUrl: "http://www.baloise.ch/terms-of-service"
+    license: "Apache 2.0"
+    licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0"
+    contact:
+      name: "John Doe"
+      url: "http://www.baloise.ch"
+      email: "john.doe@baloise.ch"
+
