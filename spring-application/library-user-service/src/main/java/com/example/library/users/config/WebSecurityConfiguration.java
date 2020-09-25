@@ -22,10 +22,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  public WebSecurityConfiguration() {
-  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement()

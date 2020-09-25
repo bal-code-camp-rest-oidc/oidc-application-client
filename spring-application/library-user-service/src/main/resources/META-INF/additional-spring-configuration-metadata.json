@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "library.server.keycloak.server-url",
+      "type": "java.lang.String",
+      "description": "Description for library.server.keycloak.server."
+    },
+    {
+      "name": "library.server.keycloak.realm-id",
+      "type": "java.lang.String",
+      "description": "Description for library.server.keycloak.realm-id."
+    },
+    {
+      "name": "library.server.keycloak.client-id",
+      "type": "java.lang.String",
+      "description": "Description for library.server.keycloak.client-id."
+    },
+    {
+      "name": "library.server.keycloak.client-secret",
+      "type": "java.lang.String",
+      "description": "Description for library.server.keycloak.client-secret."
+    }
+  ] }

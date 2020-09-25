@@ -3,7 +3,8 @@ package com.example.library.users.business;
 import ch.baloise.keycloak.client.admin.KeycloakAdminFacade;
 import ch.baloise.keycloak.client.admin.KeycloakAdminFacadeImpl;
 import ch.baloise.keycloak.client.admin.api.User;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.example.library.users.KeycloakProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,10 @@ public class UserService {
 
     private final KeycloakAdminFacade userRepository;
 
-    public UserService() {
+    @Autowired
+    public UserService(KeycloakProperties properties) {
         this.userRepository = new KeycloakAdminFacadeImpl();
-        userRepository.connect("http://localhost:8080/auth", "workshop", "keycloak-admin", "ab14c208-a2ee-47a9-9fd5-04c93cc61a2a");
+        userRepository.connect(properties.getServerUrl(), properties.getRealmId(), properties.getClientId(), properties.getClientSecret());
     }
 
     public Optional<User> findUserByEmail(String email) {

@@ -34,7 +34,7 @@ server:
 library:
   server:
     keycloak:
-      serverUrl: ${KEYCLOAK_SERVER_URL}
-      realmId: ${KEYCLOAK_REALM_ID}
-      clientId: ${KEYCLOAK_CLIENT_ID}
-      clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+      serverUrl: http://localhost:8080/auth
+      realmId: workshop
+      clientId: keycloak-admin
+      clientSecret: ab14c208-a2ee-47a9-9fd5-04c93cc61a2a
