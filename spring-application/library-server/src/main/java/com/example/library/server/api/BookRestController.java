@@ -87,9 +87,7 @@ public class BookRestController {
             bookResource.getIsbn(),
             bookResource.getTitle(),
             bookResource.getDescription(),
-            bookResource.getAuthors(),
-            bookResource.isBorrowed(),
-            null);
+            bookResource.getAuthors());
 
     UUID identifier = bookService.create(book);
 

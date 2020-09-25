@@ -15,11 +15,7 @@ public class Book {
 
     private String description;
 
-    private boolean borrowed;
-
     private List<String> authors = new ArrayList<>();
-
-    private User borrowedBy;
 
     public Book() {
     }
@@ -29,16 +25,12 @@ public class Book {
             String isbn,
             String title,
             String description,
-            List<String> authors,
-            boolean borrowed,
-            User borrowedBy) {
+            List<String> authors) {
         this.identifier = identifier;
         this.isbn = isbn;
         this.title = title;
         this.description = description;
         this.authors = authors;
-        this.borrowed = borrowed;
-        this.borrowedBy = borrowedBy;
     }
 
     public UUID getIdentifier() {
@@ -81,70 +73,32 @@ public class Book {
         this.authors = authors;
     }
 
-    public boolean isBorrowed() {
-        return borrowed;
-    }
-
-    public void setBorrowed(boolean borrowed) {
-        this.borrowed = borrowed;
-    }
-
-    public User getBorrowedBy() {
-        return borrowedBy;
-    }
-
-    public void setBorrowedBy(User borrowedBy) {
-        this.borrowedBy = borrowedBy;
-    }
-
-    public void doBorrow(User user) {
-        if (!this.borrowed) {
-            this.borrowed = true;
-            this.borrowedBy = user;
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Book book = (Book) o;
-        return borrowed == book.borrowed
-                && identifier.equals(book.identifier)
-                && isbn.equals(book.isbn)
-                && title.equals(book.title)
-                && description.equals(book.description)
-                && authors.equals(book.authors)
-                && Objects.equals(borrowedBy, book.borrowedBy);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                super.hashCode(), identifier, isbn, title, description, borrowed, authors, borrowedBy);
+        return Objects.equals(identifier, book.identifier) &&
+                Objects.equals(isbn, book.isbn) &&
+                Objects.equals(title, book.title) &&
+                description.equals(book.description) &&
+                Objects.equals(authors, book.authors);
     }
 
     @Override
     public String toString() {
-        return "Book{"
-                + "identifier="
-                + identifier
-                + ", isbn='"
-                + isbn
-                + '\''
-                + ", title='"
-                + title
-                + '\''
-                + ", description='"
-                + description
-                + '\''
-                + ", borrowed="
-                + borrowed
-                + ", authors="
-                + authors
-                + ", borrowedBy="
-                + borrowedBy
-                + '}';
+        return "Book{" +
+                "identifier=" + identifier +
+                ", isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", authors=" + authors +
+                '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier, isbn, title, description, authors);
+    }
+
 }

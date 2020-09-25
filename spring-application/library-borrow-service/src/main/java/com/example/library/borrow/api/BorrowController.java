@@ -1,39 +1,34 @@
 package com.example.library.borrow.api;
 
-import org.springframework.http.HttpStatus;
+import com.example.library.borrow.business.BorrowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
+@RestController
+@RequestMapping("/borrowBooks")
 public class BorrowController {
-  @PostMapping("/{bookId}/borrow")
-  public ResponseEntity<BookResource> borrowBookById(
-      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal LibraryUser libraryUser) {
-    return bookService.findByIdentifier(bookId)
-               .map(b -> {
-                 bookService.borrowById(bookId, libraryUser.getIdentifier());
-                 return bookService
-                            .findWithDetailsByIdentifier(b.getIdentifier())
-                            .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
-                            .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-               })
-               .orElse(ResponseEntity.notFound().build());
-  }
 
-  @PostMapping("/{bookId}/return")
-  public ResponseEntity<BookResource> returnBookById(
-      @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal LibraryUser libraryUser) {
-    return bookService.findByIdentifier(bookId)
-               .map(b -> {
-                 bookService.returnById(bookId, libraryUser.getIdentifier());
-                 return bookService
-                            .findWithDetailsByIdentifier(b.getIdentifier())
-                            .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
-                            .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-               })
-               .orElse(ResponseEntity.notFound().build());
-  }
+    private final BorrowService borrowService;
+
+    public BorrowController(BorrowService borrowService) {
+        this.borrowService = borrowService;
+    }
+
+    @PostMapping()
+    public ResponseEntity<UUID> borrowBookById(
+            @PathVariable("bookId") String bookId, @AuthenticationPrincipal OidcUser principal) {
+        //todo: REST call, validate if book exists
+        return ResponseEntity.of(Optional.of(borrowService.borrowById(UUID.fromString(bookId), principal.getName())));
+    }
+
+    @DeleteMapping("/{borrowBookId}")
+    public void returnBookById(
+            @PathVariable("borrowBookId") String borrowBookId) {
+        borrowService.returnById(UUID.fromString(borrowBookId));
+    }
 }

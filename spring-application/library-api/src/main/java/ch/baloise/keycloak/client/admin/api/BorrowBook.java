@@ -1,40 +1,35 @@
 package ch.baloise.keycloak.client.admin.api;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class BorrowBook {
 
-    private Book book;
+    private UUID borrowId;
 
-    private User borrowedBy;
+    private UUID bookId;
 
-    public BorrowBook(Book book, User borrowedBy) {
-        this.book = book;
-        this.borrowedBy = borrowedBy;
+    private String borrowerId;
+
+    public BorrowBook(UUID bookId, String borrowerId) {
+        this.bookId = bookId;
+        this.borrowerId = borrowerId;
     }
 
-    public Book getBook() {
-        return book;
+    public UUID getBookId() {
+        return bookId;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBookId(UUID bookId) {
+        this.bookId = bookId;
     }
 
-    public User getBorrowedBy() {
-        return borrowedBy;
+    public String getBorrowerId() {
+        return borrowerId;
     }
 
-    public void setBorrowedBy(User borrowedBy) {
-        this.borrowedBy = borrowedBy;
-    }
-
-    @Override
-    public String toString() {
-        return "BorrowBook{" +
-                "borrowedBook=" + book +
-                ", borrowedBy=" + borrowedBy +
-                '}';
+    public void setBorrowerId(String borrowerId) {
+        this.borrowerId = borrowerId;
     }
 
     @Override
@@ -42,12 +37,23 @@ public class BorrowBook {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BorrowBook that = (BorrowBook) o;
-        return book.equals(that.book) &&
-                borrowedBy.equals(that.borrowedBy);
+        return borrowId.equals(that.borrowId) &&
+                bookId.equals(that.bookId) &&
+                borrowerId.equals(that.borrowerId);
+    }
+
+    @Override
+    public String toString() {
+        return "BorrowBook{" +
+                "borrowId=" + borrowId +
+                ", bookId=" + bookId +
+                ", borrowerId='" + borrowerId + '\'' +
+                '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(book, borrowedBy);
+        return Objects.hash(borrowId, bookId, borrowerId);
     }
+
 }
