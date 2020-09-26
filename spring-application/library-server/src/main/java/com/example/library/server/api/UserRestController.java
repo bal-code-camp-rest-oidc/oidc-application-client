@@ -42,10 +42,4 @@ public class UserRestController {
                .map(u -> ResponseEntity.ok(userResourceAssembler.toModel(u)))
                .orElse(ResponseEntity.notFound().build());
   }
-
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @DeleteMapping("/{userId}")
-  public void deleteUser(@PathVariable("userId") UUID userId) {
-    userService.deleteByIdentifier(userId);
-  }
 }
