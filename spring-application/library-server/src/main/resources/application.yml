@@ -18,6 +18,18 @@ spring:
         jwt:
           jwk-set-uri: ${JWK_SET_URI}
           issuer-uri: ${ISSUER_URI}
+      client:
+        registration:
+          keycloak:
+            client-id: ${CLIENT_ID}
+            authorizationGrantType: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-authentication-method: none
+            scope: openid
+        provider:
+          keycloak:
+            issuerUri: ${ISSUER_URI}
+            user-name-attribute: name
 
 logging:
   level:
