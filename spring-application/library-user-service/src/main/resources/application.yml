@@ -38,7 +38,7 @@ library:
     keycloak:
       serverUrl: ${KEYCLOAK_SERVER_URI}
       realmId: ${KEYCLOAK_REALM_ID}
-      clientId: ${CLIENT_ID}
+      clientId: ${KEYCLOAK_CLIENT_ID}
       clientSecret: ${KEYCLOAK_CLIENT_SECRET}
 
 # Properties provided by com.example.library.users.properties.SwaggerProperties
