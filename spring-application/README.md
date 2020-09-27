@@ -31,3 +31,9 @@ Keeps record of who borrowed which book.
 
 ## User Service
 Provides access to a list of authorized users.
+
+To start in local mode, configure the environment-parameter `spring.config.name=application-dev` so that the local
+keycloak-addresses will be used instead of the one instantiated on OpenShift.
+
+Please paste the current **client-secret from the keycloak client** `Keycloak-admin` 
+into the file `src/main/resources/application-dev.yml`
