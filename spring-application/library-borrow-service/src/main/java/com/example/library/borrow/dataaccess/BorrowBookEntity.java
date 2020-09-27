@@ -16,7 +16,7 @@ public class BorrowBookEntity extends AbstractPersistable<Long> {
   private String userId;
 
   @NotNull
-  private UUID bookId;
+  private UUID identifier;
 
   @SuppressWarnings("unused")
   public BorrowBookEntity() {
@@ -26,16 +26,16 @@ public class BorrowBookEntity extends AbstractPersistable<Long> {
   public BorrowBookEntity(
       UUID bookId,
       String userId) {
-    this.bookId = bookId;
+    this.identifier = bookId;
     this.userId = userId;
   }
 
   public UUID getBookId() {
-    return bookId;
+    return identifier;
   }
 
   public void setBookId(UUID bookId) {
-    this.bookId = bookId;
+    this.identifier = bookId;
   }
 
   public String getUserId() {
@@ -50,7 +50,7 @@ public class BorrowBookEntity extends AbstractPersistable<Long> {
   public String toString() {
     return "BorrowBookEntity{" +
                ", userId='" + userId + '\'' +
-               ", bookId=" + bookId +
+               ", bookId=" + identifier +
                '}';
   }
 
@@ -61,11 +61,11 @@ public class BorrowBookEntity extends AbstractPersistable<Long> {
     if (!super.equals(o)) return false;
     BorrowBookEntity that = (BorrowBookEntity) o;
     return Objects.equals(userId, that.userId) &&
-               Objects.equals(bookId, that.bookId);
+               Objects.equals(identifier, that.identifier);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), userId, bookId);
+    return Objects.hash(super.hashCode(), userId, identifier);
   }
 }
