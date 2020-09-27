@@ -61,4 +61,4 @@ We are just using defaults, without changing ports, usernames or secrets.
     4. Bind DN = **uid=admin, ou=system**
     5. Bind Credential = **secret**
 
-    
+[see also chapter keycloak-administration in th documentation repo](https://github.com/bal-code-camp-rest-oidc/documentation/edit/master/README.md#keycloak-administration)    
