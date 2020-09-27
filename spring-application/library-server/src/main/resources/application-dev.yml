@@ -1,0 +1,49 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+spring:
+  jpa:
+    open-in-view: false
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: non_null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/workshop
+      client:
+        registration:
+          keycloak:
+            clientId: library-client
+            authorizationGrantType: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-authentication-method: none
+            scope: openid
+        provider:
+          keycloak:
+            issuerUri: http://localhost:8080/auth/realms/workshop
+            user-name-attribute: name
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+server:
+  error:
+    include-stacktrace: never
+  port: 9090
+  servlet:
+    context-path: /library-server
+
+library:
+  user-srv: http://localhost:9093/library-users
+  inventory-srv: http://localhost:9092/library-inventory
+  borrow-srv: http://localhost:9091/library-borrow
