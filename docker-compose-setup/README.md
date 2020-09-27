@@ -17,3 +17,13 @@ setting up the following backend:
     - _Version_: 11.0.2
     - _Access_: http://localhost:8080, https://localhost:8443 (self-signed)
     - _Local Storage_: (using MySQL) 
+    
+## Docker Compose usage
+
+Start the Keycloak-Application described as above, using docker-compose syntax:
+
+*(starting from project-root)*
+```bash
+cd docker-compose-setup
+docker-compose up -d
+```    
