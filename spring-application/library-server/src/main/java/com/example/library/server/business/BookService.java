@@ -168,4 +168,13 @@ public class BookService {
       borrowRestTemplate.postForEntity("/borrowBooks/" + book.getIdentifier(), user, String.class);
     }
   }
+
+  public String getBorrowedByOfBook(Book book) {
+    RestTemplate restTemplate = new RestTemplateBuilder()
+            // todo auth
+            .rootUri(borrowServiceUri)
+            .build();
+    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
+    return borrowedBy == null ? null : borrowedBy;
+  }
 }

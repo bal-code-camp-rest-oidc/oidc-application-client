@@ -2,6 +2,7 @@ package com.example.library.server.api.resource;
 
 
 import ch.baloise.keycloak.client.admin.api.Book;
+import ch.baloise.keycloak.client.admin.api.User;
 import com.example.library.server.api.resource.assembler.UserResourceAssembler;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -35,16 +36,16 @@ public class BookResource extends RepresentationModel<BookResource> {
 
   public BookResource() {}
 
-  public BookResource(Book book) {
+  public BookResource(Book book, User borrowedBy) {
     this(
         book.getIdentifier(),
         book.getIsbn(),
         book.getTitle(),
         book.getDescription(),
         book.getAuthors(),
-        book.isBorrowed(),
-        book.getBorrowedBy() != null
-            ? new UserResourceAssembler().toModel(book.getBorrowedBy())
+            borrowedBy != null,
+            borrowedBy != null
+            ? new UserResourceAssembler().toModel(borrowedBy)
             : null);
   }
 
