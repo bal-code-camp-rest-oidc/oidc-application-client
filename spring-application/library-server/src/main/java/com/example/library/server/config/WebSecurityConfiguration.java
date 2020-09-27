@@ -9,6 +9,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +37,24 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     this.oAuth2ResourceServerProperties = oAuth2ResourceServerProperties;
   }
 
+  @Bean
+  JwtDecoder jwtDecoder() {
+    NimbusJwtDecoder jwtDecoder =
+            NimbusJwtDecoder.withJwkSetUri(oAuth2ResourceServerProperties.getJwt().getJwkSetUri())
+                    .build();
+
+    OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
+    OAuth2TokenValidator<Jwt> withIssuer =
+            JwtValidators.createDefaultWithIssuer(
+                    oAuth2ResourceServerProperties.getJwt().getIssuerUri());
+    OAuth2TokenValidator<Jwt> withAudience =
+            new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+    jwtDecoder.setJwtValidator(withAudience);
+
+    return jwtDecoder;
+  }
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement()
@@ -43,8 +67,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .anyRequest()
         .fullyAuthenticated()
         .and()
+        .oauth2Client()
+        .and()
         .oauth2ResourceServer()
-        .jwt();
+        .jwt()
+    ;
   }
 
   @Bean
