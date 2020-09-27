@@ -74,12 +74,12 @@ public class BookService {
 
   @Transactional
   @PreAuthorize("hasRole('LIBRARY_USER')")
-  public void borrowById(UUID bookIdentifier, UUID userIdentifier) {
-    if (bookIdentifier == null || userIdentifier == null) {
+  public void borrowById(UUID bookIdentifier, String userName) {
+    if (bookIdentifier == null || userName == null) {
       return;
     }
 
-    userService.findByIdentifier(userIdentifier).ifPresent(
+    userService.findByIdentifier(userName).ifPresent(
         u ->
             this.findByIdentifier(bookIdentifier)
                 .ifPresent(
@@ -91,14 +91,14 @@ public class BookService {
 
   @Transactional
   @PreAuthorize("hasRole('LIBRARY_USER')")
-  public void returnById(UUID bookIdentifier, UUID userIdentifier) {
+  public void returnById(UUID bookIdentifier, String userName) {
 
-    if (bookIdentifier == null || userIdentifier == null) {
+    if (bookIdentifier == null || userName == null) {
       return;
     }
 
     userService
-        .findByIdentifier(userIdentifier)
+        .findByIdentifier(userName)
         .ifPresent(
             u ->
                 findByIdentifier(bookIdentifier)
@@ -137,7 +137,7 @@ public class BookService {
     String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
 
     if (borrowedBy != null && !borrowedBy.equals("")) {
-      if (user.getIdentifier().equals(UUID.fromString(borrowedBy))) {
+      if (user.getUserName().equals(borrowedBy)) {
 
 
         RestTemplate bookRestTemplate = new RestTemplateBuilder()

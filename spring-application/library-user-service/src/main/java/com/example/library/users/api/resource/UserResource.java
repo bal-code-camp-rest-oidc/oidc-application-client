@@ -35,7 +35,7 @@ public class UserResource extends RepresentationModel<UserResource> {
     }
 
     public UserResource(User user) {
-        this(user.getIdentifier(), user.getUserId(), user.getEmail(), user.getFirstName(), user.getLastName());
+        this(user.getIdentifier(), user.getUserName(), user.getEmail(), user.getFirstName(), user.getLastName());
     }
 
     public UserResource(UUID identifier, String userid, String email, String firstName, String lastName) {

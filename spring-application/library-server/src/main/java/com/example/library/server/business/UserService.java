@@ -23,14 +23,14 @@ public class UserService {
   private String userServiceUri;
 
   @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  public Optional<User> findByIdentifier(UUID userIdentifier) {
+  public Optional<User> findByIdentifier(String userIdentifier) {
     RestTemplate restTemplate = new RestTemplateBuilder()
                                     // todo auth
                                     .rootUri(userServiceUri)
                                     .build();
 
     ResponseEntity<User> response = restTemplate.exchange(
-        userIdentifier.toString(), HttpMethod.GET, null,
+        userIdentifier, HttpMethod.GET, null,
         new ParameterizedTypeReference<User>() {
         });
 

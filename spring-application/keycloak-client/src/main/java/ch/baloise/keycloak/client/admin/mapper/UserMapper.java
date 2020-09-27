@@ -9,7 +9,7 @@ public class UserMapper {
 
     public static User map(UserRepresentation keycloakUser) {
         User currentUser = new User();
-
+        currentUser.setUserName(keycloakUser.getUsername());
         currentUser.setEmail(keycloakUser.getEmail());
         currentUser.setFirstName(keycloakUser.getFirstName());
         currentUser.setLastName((keycloakUser.getLastName()));

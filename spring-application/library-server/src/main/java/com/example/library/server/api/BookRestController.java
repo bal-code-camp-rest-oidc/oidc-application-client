@@ -10,6 +10,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -53,7 +54,7 @@ public class BookRestController {
         .findByIdentifier(bookId)
         .map(
             b -> {
-              bookService.borrowById(bookId, libraryUser.getIdentifier());
+              bookService.borrowById(bookId, libraryUser.getUserName());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
                   .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
@@ -69,7 +70,7 @@ public class BookRestController {
         .findByIdentifier(bookId)
         .map(
             b -> {
-              bookService.returnById(bookId, libraryUser.getIdentifier());
+              bookService.returnById(bookId, libraryUser.getUserName());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
                   .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))

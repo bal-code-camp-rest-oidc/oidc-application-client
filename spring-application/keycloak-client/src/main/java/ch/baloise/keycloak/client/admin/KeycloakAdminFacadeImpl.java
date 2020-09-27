@@ -52,6 +52,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
         keycloak = KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
                 .realm(realmId)
+                // service called with Access Type 'confidential' eg. without user-context coming from Bearer JWT
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .clientId(clientId)
                 .clientSecret(clientSecret)

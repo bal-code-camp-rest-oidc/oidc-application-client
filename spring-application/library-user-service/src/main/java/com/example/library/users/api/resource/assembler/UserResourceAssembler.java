@@ -22,7 +22,7 @@ public class UserResourceAssembler extends RepresentationModelAssemblerSupport<U
     public UserResource toModel(User user) {
         UserResource userResource = new UserResource(user);
         userResource.add(
-                linkTo(methodOn(UserRestController.class).getUser(user.getUserId())).withSelfRel());
+                linkTo(methodOn(UserRestController.class).getUser(user.getUserName())).withSelfRel());
         return userResource;
     }
 

@@ -36,7 +36,7 @@ public class UserRestController {
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<UserResource> getUser(@PathVariable("userId") UUID userId) {
+  public ResponseEntity<UserResource> getUser(@PathVariable("userId") String userId) {
     return userService
                .findByIdentifier(userId)
                .map(u -> ResponseEntity.ok(userResourceAssembler.toModel(u)))

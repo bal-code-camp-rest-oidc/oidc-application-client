@@ -4,6 +4,9 @@ import ch.baloise.keycloak.client.admin.api.Book;
 import ch.baloise.keycloak.client.admin.api.User;
 import com.example.library.server.api.BookRestController;
 import com.example.library.server.api.resource.BookResource;
+import com.example.library.server.business.BookService;
+import com.example.library.server.business.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -14,14 +17,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class BookResourceAssembler extends RepresentationModelAssemblerSupport<Book, BookResource> {
 
-  public BookResourceAssembler() {
+  private final BookService bookService;
+  private final UserService userService;
+
+  @Autowired
+  public BookResourceAssembler(BookService bookService, UserService userService) {
     super(BookRestController.class, BookResource.class);
+
+    this.bookService = bookService;
+    this.userService = userService;
   }
 
   @Override
   public BookResource toModel(Book book) {
-
-    BookResource bookResource = new BookResource(book);
+    String userid = bookService.getBorrowedByOfBook(book);
+    User user = userid == null ? null : userService.findByIdentifier(userid).orElse(null);
+    BookResource bookResource = new BookResource(book, user);
     bookResource.add(
         linkTo(methodOn(BookRestController.class).getBookById(book.getIdentifier())).withSelfRel());
     bookResource.add(
