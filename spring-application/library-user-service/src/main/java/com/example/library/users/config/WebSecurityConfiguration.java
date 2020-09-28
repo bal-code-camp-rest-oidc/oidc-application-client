@@ -1,6 +1,5 @@
 package com.example.library.users.config;
 
-import com.example.library.users.properties.KeycloakAdminProperties;
 import com.example.library.users.properties.SwaggerKeycloakProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

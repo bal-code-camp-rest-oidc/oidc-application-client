@@ -20,7 +20,6 @@ public class CreateBookResource {
 
   private User borrowedBy = null;
 
-  @SuppressWarnings("unused")
   public CreateBookResource() {}
 
   public String getIsbn() {

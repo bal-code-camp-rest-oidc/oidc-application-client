@@ -1,7 +1,6 @@
 package com.example.library.users.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -70,7 +69,7 @@ public class SwaggerApiInfoProperties {
         this.licenseUrl = licenseUrl;
     }
 
-    public class Contact {
+    public static class Contact {
         private String name;
         private String url;
         private String email;

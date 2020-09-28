@@ -24,7 +24,6 @@ public class BookResource {
 
     private User borrowedBy;
 
-    @SuppressWarnings("unused")
     public BookResource() {
     }
 

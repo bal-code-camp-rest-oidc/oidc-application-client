@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 @Validated
 public class UserRestController {
-
   private final UserService userService;
   private final UserResourceAssembler userResourceAssembler;
 
