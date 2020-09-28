@@ -2,7 +2,7 @@ package com.example.library.users.business;
 
 import ch.baloise.keycloak.client.admin.KeycloakAdminFacade;
 import ch.baloise.keycloak.client.admin.KeycloakAdminFacadeImpl;
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import com.example.library.users.properties.KeycloakAdminProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

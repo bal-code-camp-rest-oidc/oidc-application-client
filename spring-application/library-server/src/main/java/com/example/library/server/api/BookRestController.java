@@ -1,7 +1,7 @@
 package com.example.library.server.api;
 
-import ch.baloise.keycloak.client.admin.api.User;
-import ch.baloise.keycloak.client.admin.api.Book;
+import com.example.library.api.User;
+import com.example.library.api.Book;
 import com.example.library.server.api.resource.BookResource;
 import com.example.library.server.api.resource.assembler.BookResourceAssembler;
 import com.example.library.server.business.BookService;
@@ -53,7 +53,7 @@ public class BookRestController {
         .findByIdentifier(bookId)
         .map(
             b -> {
-              bookService.borrowById(bookId, libraryUser.getIdentifier());
+              bookService.borrowById(bookId, libraryUser.getUserName());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
                   .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
@@ -69,7 +69,7 @@ public class BookRestController {
         .findByIdentifier(bookId)
         .map(
             b -> {
-              bookService.returnById(bookId, libraryUser.getIdentifier());
+              bookService.returnById(bookId, libraryUser.getUserName());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
                   .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))

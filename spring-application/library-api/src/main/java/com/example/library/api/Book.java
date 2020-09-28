@@ -1,4 +1,4 @@
-package ch.baloise.keycloak.client.admin.api;
+package com.example.library.api;
 
 import java.util.ArrayList;
 import java.util.List;

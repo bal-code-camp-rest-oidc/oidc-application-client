@@ -1,6 +1,6 @@
 package ch.baloise.keycloak.client.admin;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -16,19 +16,19 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${JWK_SET_URI}
-          issuer-uri: ${ISSUER_URI}
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/workshop
       client:
         registration:
           keycloak:
-            client-id: ${CLIENT_ID}
+            clientId: library-client
             authorizationGrantType: authorization_code
             redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
             client-authentication-method: none
             scope: openid
         provider:
           keycloak:
-            issuerUri: ${ISSUER_URI}
+            issuerUri: http://localhost:8080/auth/realms/workshop
             user-name-attribute: name
 
 logging:
@@ -44,6 +44,6 @@ server:
     context-path: /library-server
 
 library:
-  user-srv: ${USER_SERVICE_URI}
-  inventory-srv: ${INVENTORY_SERVICE_URI}
-  borrow-srv: ${BORROW_SERVICE_URI}
+  user-srv: http://localhost:9093/library-users
+  inventory-srv: http://localhost:9092/library-inventory
+  borrow-srv: http://localhost:9091/library-borrow

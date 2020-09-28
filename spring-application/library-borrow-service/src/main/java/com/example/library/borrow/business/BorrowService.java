@@ -44,7 +44,7 @@ public class BorrowService {
 
   @Transactional
   @PreAuthorize("hasRole('LIBRARY_USER')")
-  public Optional<String> getBorrowerByBook(UUID borrowBookId) {
+  public Optional<String> getBorrowerOfBook(UUID borrowBookId) {
     String user = borrowBookRepository.findOneByIdentifier(borrowBookId)
                       .map(BorrowBookEntity::getUserId)
                       .orElse(null);

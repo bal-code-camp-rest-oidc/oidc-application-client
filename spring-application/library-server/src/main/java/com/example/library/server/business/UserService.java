@@ -1,6 +1,6 @@
 package com.example.library.server.business;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,14 +22,14 @@ public class UserService {
   private String userServiceUri;
 
   @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  public Optional<User> findByIdentifier(UUID userIdentifier) {
+  public Optional<User> findByIdentifier(String userIdentifier) {
     RestTemplate restTemplate = new RestTemplateBuilder()
                                     // todo auth
                                     .rootUri(userServiceUri)
                                     .build();
 
     ResponseEntity<User> response = restTemplate.exchange(
-        userIdentifier.toString(), HttpMethod.GET, null,
+        userIdentifier, HttpMethod.GET, null,
         new ParameterizedTypeReference<User>() {
         });
 

@@ -1,4 +1,4 @@
-package ch.baloise.keycloak.client.admin.api;
+package com.example.library.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class User {
 
     private String lastName;
 
-    private String userId;
+    private String userName;
 
     private List<String> roles = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class User {
     public User(User user) {
         this(
                 user.getIdentifier(),
-                user.getUserId(),
+                user.getUserName(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
@@ -33,9 +33,9 @@ public class User {
     }
 
     public User(
-            UUID identifier, String userId, String email, String firstName, String lastName, List<String> roles) {
+            UUID identifier, String userName, String email, String firstName, String lastName, List<String> roles) {
         this.identifier = identifier;
-        this.userId = userId;
+        this.userName = userName;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,12 +50,12 @@ public class User {
         this.identifier = identifier;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {

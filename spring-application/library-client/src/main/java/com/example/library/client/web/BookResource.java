@@ -1,6 +1,6 @@
 package com.example.library.client.web;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ public class BookResource {
 
     private User borrowedBy;
 
-    @SuppressWarnings("unused")
     public BookResource() {
     }
 

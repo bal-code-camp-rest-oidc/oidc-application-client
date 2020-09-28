@@ -32,6 +32,6 @@ public class BorrowController {
 
   @GetMapping("/{borrowBookId}")
   public ResponseEntity<String> getBorrowerForBook(@PathVariable("borrowBookId") String bookId) {
-    return ResponseEntity.of(borrowService.getBorrowerByBook(UUID.fromString(bookId)));
+    return ResponseEntity.of(borrowService.getBorrowerOfBook(UUID.fromString(bookId)));
   }
 }

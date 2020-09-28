@@ -1,6 +1,6 @@
 package com.example.library.server.api.resource.assembler;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import com.example.library.server.api.UserRestController;
 import com.example.library.server.api.resource.UserResource;
 import org.springframework.hateoas.CollectionModel;
@@ -21,7 +21,7 @@ public class UserResourceAssembler extends RepresentationModelAssemblerSupport<U
   public UserResource toModel(User user) {
     UserResource userResource = new UserResource(user);
     userResource.add(
-        linkTo(methodOn(UserRestController.class).getUser(user.getIdentifier())).withSelfRel());
+        linkTo(methodOn(UserRestController.class).getUser(user.getUserName())).withSelfRel());
     return userResource;
   }
 

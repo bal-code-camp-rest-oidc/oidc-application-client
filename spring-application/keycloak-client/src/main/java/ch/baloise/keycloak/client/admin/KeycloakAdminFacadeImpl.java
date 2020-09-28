@@ -1,6 +1,6 @@
 package ch.baloise.keycloak.client.admin;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import ch.baloise.keycloak.client.admin.mapper.UserMapper;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
@@ -52,6 +52,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
         keycloak = KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
                 .realm(realmId)
+                // service called with Access Type 'confidential' eg. without user-context coming from Bearer JWT
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .clientId(clientId)
                 .clientSecret(clientSecret)

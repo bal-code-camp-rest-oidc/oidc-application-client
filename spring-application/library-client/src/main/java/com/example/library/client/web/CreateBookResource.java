@@ -1,6 +1,6 @@
 package com.example.library.client.web;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ public class CreateBookResource {
 
   private User borrowedBy = null;
 
-  @SuppressWarnings("unused")
   public CreateBookResource() {}
 
   public String getIsbn() {
