@@ -1,6 +1,6 @@
 package com.example.library.server.api.resource.assembler;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import com.example.library.server.api.UserRestController;
 import com.example.library.server.api.resource.UserResource;
 import org.springframework.hateoas.CollectionModel;

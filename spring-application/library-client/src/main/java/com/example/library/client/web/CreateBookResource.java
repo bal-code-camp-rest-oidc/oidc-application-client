@@ -1,6 +1,6 @@
 package com.example.library.client.web;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package ch.baloise.keycloak.client.admin;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import ch.baloise.keycloak.client.admin.mapper.UserMapper;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;

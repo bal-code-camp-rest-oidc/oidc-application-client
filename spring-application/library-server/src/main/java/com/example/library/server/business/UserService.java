@@ -1,6 +1,6 @@
 package com.example.library.server.business;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)

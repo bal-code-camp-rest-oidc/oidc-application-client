@@ -1,8 +1,8 @@
 package com.example.library.server.api.resource;
 
 
-import ch.baloise.keycloak.client.admin.api.Book;
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.Book;
+import com.example.library.api.User;
 import com.example.library.server.api.resource.assembler.UserResourceAssembler;
 import org.springframework.hateoas.RepresentationModel;
 

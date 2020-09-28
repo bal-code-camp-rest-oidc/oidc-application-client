@@ -1,7 +1,7 @@
 package com.example.library.server.business;
 
-import ch.baloise.keycloak.client.admin.api.Book;
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.Book;
+import com.example.library.api.User;
 import com.example.library.server.api.resource.BookResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

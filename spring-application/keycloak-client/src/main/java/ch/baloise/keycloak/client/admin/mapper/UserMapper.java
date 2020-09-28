@@ -1,6 +1,6 @@
 package ch.baloise.keycloak.client.admin.mapper;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.UUID;

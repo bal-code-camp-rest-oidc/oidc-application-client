@@ -1,7 +1,7 @@
 package com.example.library.server.api;
 
-import ch.baloise.keycloak.client.admin.api.User;
-import ch.baloise.keycloak.client.admin.api.Book;
+import com.example.library.api.User;
+import com.example.library.api.Book;
 import com.example.library.server.api.resource.BookResource;
 import com.example.library.server.api.resource.assembler.BookResourceAssembler;
 import com.example.library.server.business.BookService;
@@ -10,7 +10,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

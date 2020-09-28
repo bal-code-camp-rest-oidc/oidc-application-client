@@ -2,7 +2,7 @@ package com.example.library.users.api.resource;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import ch.baloise.keycloak.client.admin.api.User;
+import com.example.library.api.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
