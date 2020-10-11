@@ -42,6 +42,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
+    - name: Build base-libs with Gradle to local maven repo
+      run: cd spring-application && gradle :library-api:install && cd ..
     - name: Build with Gradle
       run: cd spring-application && gradle :library-borrow-service:bootBuildImage && cd ..
     - uses: actions/checkout@v1
