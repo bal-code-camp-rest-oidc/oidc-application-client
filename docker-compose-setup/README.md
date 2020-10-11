@@ -25,7 +25,17 @@ Start the Keycloak-Application described as above, using docker-compose syntax:
 *(starting from project-root)*
 ```bash
 cd docker-compose-setup
-docker-compose up -d
+docker-compose -f docker-compose.yml up -d
+```
+
+Start the library-scenario spring-application together with 
+the Keycloak-Application described as above, using docker-compose syntax:
+
+*(starting from project-root)*
+```bash
+cd docker-compose-setup
+export KEYCLOAK_HOST=$(hostname) // or determine/set the ipv4-address
+docker-compose -f docker-compose.yml -f library-scenario-apps.yml up -d
 ```
 
 ## Additional Setup

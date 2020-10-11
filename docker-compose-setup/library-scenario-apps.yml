@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  # Service Scenario
+
+  library-frontend:
+    image: luechtdiode/oidc-ws-library-frontend:latest
+    restart: always
+    environment:
+      CLIENT_ID: library-client-pkce
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+      SERVER_URL: http://library-facade-server:9090/library-server
+    ports:
+      - 9089:9090
+    depends_on:
+      - library-facade-server
+    links:
+      - library-facade-server
+    networks:
+      - library-network
+
+  library-facade-server:
+    image: luechtdiode/oidc-ws-library-facade-server:latest
+    restart: always
+    ports:
+      - 9090:9090
+    environment:
+      JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+      BORROW_SERVICE_URI: http://library-borrow-service:9091/library-borrow
+      INVENTORY_SERVICE_URI: http://library-inventory-service:9092/library-inventory
+      USER_SERVICE_URI: http://library-user-server:9093/library-users
+    depends_on:
+      - library-borrow-service
+      - library-inventory-service
+      - library-user-server
+    links:
+      - library-borrow-service
+      - library-inventory-service
+      - library-user-server
+    networks:
+      - library-network
+
+  library-borrow-service:
+    image: luechtdiode/oidc-ws-library-borrow-service:latest
+    ports:
+      - 9091:9091
+    environment:
+      JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+    networks:
+      - library-network
+
+  library-inventory-service:
+    image: luechtdiode/oidc-ws-library-inventory-service:latest
+    ports:
+      - 9092:9092
+    environment:
+      JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+    networks:
+      - library-network
+
+  library-user-server:
+    image: luechtdiode/oidc-ws-library-user-server:latest
+    ports:
+      - 9093:9093
+    environment:
+      KEYCLOAK_CLIENT_ID: keycloak-admin
+      KEYCLOAK_CLIENT_SECRET: 9a1a383c-361d-40b2-9adb-3fdcc7014c76
+      JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+      KEYCLOAK_REALM_ID: workshop
+      KEYCLOAK_SERVER_URI: http://${KEYCLOAK_HOST}:8080/auth
+      SWAGGER_CLIENT_ID: library-client
+      SWAGGER_CLIENT_SECRET: 9584640c-3804-4dcd-997b-93593cfb9ea7
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    driver: bridge
