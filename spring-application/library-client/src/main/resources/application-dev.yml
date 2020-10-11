@@ -1,0 +1,38 @@
+server:
+  servlet:
+    context-path: /library-client
+  port: 9090
+  error:
+    include-stacktrace: never
+
+spring:
+  banner:
+    location: classpath:/cc-banner.txt
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: library-client-pkce
+            authorizationGrantType: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-authentication-method: none
+            scope: openid
+        provider:
+          keycloak:
+            issuerUri: http://localhost:8080/auth/realms/workshop
+            user-name-attribute: name
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        web: info
+
+library:
+  client:
+    redirect-url: '{baseUrl}'
+  server: ${SERVER_URL}
