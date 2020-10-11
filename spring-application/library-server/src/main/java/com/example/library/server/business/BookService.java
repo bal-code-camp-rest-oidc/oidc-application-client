@@ -5,13 +5,14 @@ import com.example.library.api.User;
 import com.example.library.server.api.resource.BookResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,159 +23,222 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class BookService {
 
-  @Value("library.inventory-srv")
-  private String bookServiceUri;
+    @Value("${library.inventory-srv}")
+    private String bookServiceUri;
 
-  UserService userService;
+    @Value("${library.borrow-srv}")
+    private String borrowServiceUri;
 
-  @Value("library.borrow-srv")
-  private String borrowServiceUri;
+    private final UserService userService;
+    private final WebClient webClient;
 
-  @Autowired
-  public BookService(UserService userService) {
-    this.userService = userService;
-  }
-
-  @Transactional
-  @PreAuthorize("hasRole('LIBRARY_CURATOR')")
-  public UUID create(Book book) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(bookServiceUri)
-                                    .build();
-    ResponseEntity<BookResource> response = restTemplate.postForEntity("", book, BookResource.class);
-    return response.getBody() == null ? null : response.getBody().getIdentifier();
-  }
-
-  @Transactional
-  @PreAuthorize("hasRole('LIBRARY_CURATOR')")
-  public UUID update(Book book) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(bookServiceUri)
-                                    .build();
-    restTemplate.put(book.getIdentifier().toString(), book);
-    return book.getIdentifier();
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  public Optional<Book> findByIdentifier(UUID uuid) {
-    return findWithDetailsByIdentifier(uuid);
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  public Optional<Book> findWithDetailsByIdentifier(UUID uuid) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(bookServiceUri)
-                                    .build();
-    ResponseEntity<Book> response = restTemplate.getForEntity(uuid.toString(), Book.class);
-    return response.getBody() == null ? Optional.empty() : Optional.of(response.getBody());
-  }
-
-  @Transactional
-  @PreAuthorize("hasRole('LIBRARY_USER')")
-  public void borrowById(UUID bookIdentifier, String userName) {
-    if (bookIdentifier == null || userName == null) {
-      return;
+    @Autowired
+    public BookService(UserService userService, WebClient webClient) {
+        this.userService = userService;
+        this.webClient = webClient;
     }
 
-    userService.findByIdentifier(userName).ifPresent(
-        u ->
-            this.findByIdentifier(bookIdentifier)
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARY_CURATOR')")
+    public UUID create(Book book) {
+        return webClient
+                .post()
+                .uri(bookServiceUri + "/books")
+                .body(Mono.just(book), Book.class)
+                .retrieve()
+                .onStatus(
+                        s -> s.equals(HttpStatus.UNAUTHORIZED),
+                        cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                .onStatus(
+                        HttpStatus::is4xxClientError,
+                        cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                .onStatus(
+                        HttpStatus::is5xxServerError,
+                        cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+                .bodyToMono(BookResource.class)
+                .log()
+                .blockOptional().map(r -> r.getIdentifier()).orElse(null)
+                ;
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARY_CURATOR')")
+    public UUID update(Book book) {
+        return webClient
+                .put()
+                .uri(bookServiceUri + "/books")
+                .body(Mono.just(book), Book.class)
+                .retrieve()
+                .onStatus(
+                        s -> s.equals(HttpStatus.UNAUTHORIZED),
+                        cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                .onStatus(
+                        HttpStatus::is4xxClientError,
+                        cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                .onStatus(
+                        HttpStatus::is5xxServerError,
+                        cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+                .bodyToMono(BookResource.class)
+                .log()
+                .blockOptional().map(r -> r.getIdentifier()).orElse(null)
+                ;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public Optional<Book> findByIdentifier(UUID uuid) {
+        return findWithDetailsByIdentifier(uuid);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public Optional<Book> findWithDetailsByIdentifier(UUID uuid) {
+        return webClient
+                .get()
+                .uri(bookServiceUri + "/books/" + uuid.toString())
+                .retrieve()
+                .bodyToMono(Book.class)
+                .log()
+                .blockOptional()
+                ;
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARY_USER')")
+    public void borrowById(UUID bookIdentifier, String userName) {
+        if (bookIdentifier == null || userName == null) {
+            return;
+        }
+
+        userService.findByIdentifier(userName).ifPresent(
+                u ->
+                        this.findByIdentifier(bookIdentifier)
+                                .ifPresent(
+                                        b -> {
+                                            doBorrow(b, u);
+                                            this.update(b);
+                                        }));
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARY_USER')")
+    public void returnById(UUID bookIdentifier, String userName) {
+
+        if (bookIdentifier == null || userName == null) {
+            return;
+        }
+
+        userService
+                .findByIdentifier(userName)
                 .ifPresent(
-                    b -> {
-                      doBorrow(b, u);
-                      this.update(b);
-                    }));
-  }
-
-  @Transactional
-  @PreAuthorize("hasRole('LIBRARY_USER')")
-  public void returnById(UUID bookIdentifier, String userName) {
-
-    if (bookIdentifier == null || userName == null) {
-      return;
+                        u ->
+                                findByIdentifier(bookIdentifier)
+                                        .ifPresent(
+                                                b -> {
+                                                    doReturn(b, u);
+                                                    update(b);
+                                                }));
     }
 
-    userService
-        .findByIdentifier(userName)
-        .ifPresent(
-            u ->
-                findByIdentifier(bookIdentifier)
-                    .ifPresent(
-                        b -> {
-                          doReturn(b, u);
-                          update(b);
-                        }));
-  }
-
-  @PreAuthorize("isAuthenticated()")
-  public List<Book> findAll() {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(bookServiceUri)
-                                    .build();
-    ResponseEntity<Book[]> response = restTemplate.getForEntity("", Book[].class);
-    return response.getBody() == null ? null : Arrays.asList(response.getBody());
-  }
-
-  @Transactional
-  @PreAuthorize("hasRole('LIBRARY_CURATOR')")
-  public void deleteByIdentifier(UUID bookIdentifier) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(bookServiceUri)
-                                    .build();
-    restTemplate.delete(bookIdentifier.toString());
-  }
-
-  private void doReturn(Book book, User user) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(borrowServiceUri)
-                                    .build();
-    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
-
-    if (borrowedBy != null && !borrowedBy.equals("")) {
-      if (user.getUserName().equals(borrowedBy)) {
-
-
-        RestTemplate bookRestTemplate = new RestTemplateBuilder()
-                                            // todo auth
-                                            .rootUri(bookServiceUri)
-                                            .build();
-        bookRestTemplate.delete("/borrowBooks/" + book.getIdentifier());
-      } else {
-        throw new AccessDeniedException(
-            String.format(
-                "User %s cannot return a book borrowed by another user", user.getEmail()));
-      }
+    @PreAuthorize("isAuthenticated()")
+    public List<Book> findAll() {
+        return webClient
+                .get()
+                .uri(bookServiceUri + "/books")
+                .retrieve()
+                .bodyToMono(Book[].class)
+                .log()
+                .map(Arrays::asList)
+                .block()
+                ;
     }
-  }
 
-  private void doBorrow(Book book, User user) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(borrowServiceUri)
-                                    .build();
-    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
-
-    if (borrowedBy == null || borrowedBy.equals("")) {
-      RestTemplate borrowRestTemplate = new RestTemplateBuilder()
-                                            // todo auth
-                                            .rootUri(borrowServiceUri)
-                                            .build();
-      borrowRestTemplate.postForEntity("/borrowBooks/" + book.getIdentifier(), user, String.class);
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARY_CURATOR')")
+    public void deleteByIdentifier(UUID bookIdentifier) {
+        webClient
+                .delete()
+                .uri(bookServiceUri + "/books/" + bookIdentifier.toString())
+                .retrieve()
+                .onStatus(
+                        s -> s.equals(HttpStatus.UNAUTHORIZED),
+                        cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                .onStatus(
+                        HttpStatus::is4xxClientError,
+                        cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                .onStatus(
+                        HttpStatus::is5xxServerError,
+                        cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+        ;
     }
-  }
 
-  public String getBorrowedByOfBook(Book book) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-            // todo auth
-            .rootUri(borrowServiceUri)
-            .build();
-    String borrowedBy = restTemplate.getForEntity("/borrowBooks/" + book.getIdentifier(), String.class).getBody();
-    return borrowedBy == null ? null : borrowedBy;
-  }
+    private void doReturn(Book book, User user) {
+        String borrowedBy = getBorrowedByOfBook(book);
+
+        if (borrowedBy != null && !borrowedBy.equals("")) {
+            if (user.getUserName().equals(borrowedBy)) {
+                webClient
+                        .delete()
+                        .uri(borrowServiceUri + "/borrowBooks/" + book.getIdentifier())
+                        .retrieve()
+                        .onStatus(
+                                s -> s.equals(HttpStatus.UNAUTHORIZED),
+                                cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                        .onStatus(
+                                HttpStatus::is4xxClientError,
+                                cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                        .onStatus(
+                                HttpStatus::is5xxServerError,
+                                cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+                        .bodyToMono(String.class)
+                        .block()
+                ;
+            } else {
+                throw new AccessDeniedException(
+                        String.format(
+                                "User %s cannot return a book borrowed by another user", user.getEmail()));
+            }
+        }
+    }
+
+    private void doBorrow(Book book, User user) {
+        String borrowedBy = getBorrowedByOfBook(book);
+
+        if (borrowedBy == null || borrowedBy.equals("")) {
+            webClient
+                    .post()
+                    .uri(borrowServiceUri + "/borrowBooks/" + book.getIdentifier())
+                    .body(Mono.just(user), User.class)
+                    .retrieve()
+                    .onStatus(
+                            s -> s.equals(HttpStatus.UNAUTHORIZED),
+                            cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                    .onStatus(
+                            HttpStatus::is4xxClientError,
+                            cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                    .onStatus(
+                            HttpStatus::is5xxServerError,
+                            cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+                    .bodyToMono(String.class)
+                    .block()
+            ;
+        }
+    }
+
+    public String getBorrowedByOfBook(Book book) {
+        return webClient
+                .get()
+                .uri(borrowServiceUri + "/borrowBooks/" + book.getIdentifier())
+                .retrieve()
+                .onStatus(
+                        s -> s.equals(HttpStatus.UNAUTHORIZED),
+                        cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+                .onStatus(
+                        HttpStatus::is4xxClientError,
+                        cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                .onStatus(
+                        HttpStatus::is5xxServerError,
+                        cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+                .bodyToMono(String.class)
+                .block()
+                ;
+    }
 }

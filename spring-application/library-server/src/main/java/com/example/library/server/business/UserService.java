@@ -1,16 +1,14 @@
 package com.example.library.server.business;
 
 import com.example.library.api.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,36 +16,38 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService {
 
-  @Value("library.user-srv")
-  private String userServiceUri;
+    @Value("${library.user-srv}")
+    private String userServiceUri;
 
-  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  public Optional<User> findByIdentifier(String userIdentifier) {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    // todo auth
-                                    .rootUri(userServiceUri)
-                                    .build();
+    private final WebClient webClient;
 
-    ResponseEntity<User> response = restTemplate.exchange(
-        userIdentifier, HttpMethod.GET, null,
-        new ParameterizedTypeReference<User>() {
-        });
+    @Autowired
+    public UserService(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
-    return response.getBody() == null ? Optional.empty() : Optional.of(response.getBody());
-  }
+    @PreAuthorize("hasRole('LIBRARY_ADMIN')")
+    public Optional<User> findByIdentifier(String userIdentifier) {
+        return webClient
+                .get()
+                .uri(userServiceUri + "/users/" + userIdentifier)
+                .retrieve()
+                .bodyToMono(User.class)
+                .log()
+                .blockOptional()
+                ;
+    }
 
-  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
-  public List<User> findAll() {
-    RestTemplate restTemplate = new RestTemplateBuilder()
-                                    .rootUri(userServiceUri)
-                                    // todo auth
-                                    .build();
-
-    ResponseEntity<List<User>> response = restTemplate.exchange(
-        "", HttpMethod.GET, null,
-        new ParameterizedTypeReference<List<User>>() {
-        });
-
-    return response.getBody();
-  }
+    @PreAuthorize("hasRole('LIBRARY_ADMIN')")
+    public List<User> findAll() {
+        return webClient
+                .get()
+                .uri(userServiceUri + "/users")
+                .retrieve()
+                .bodyToMono(User[].class)
+                .log()
+                .map(Arrays::asList)
+                .block()
+                ;
+    }
 }

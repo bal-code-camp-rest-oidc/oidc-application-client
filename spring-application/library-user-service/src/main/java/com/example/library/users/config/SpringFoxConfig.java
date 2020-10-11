@@ -58,13 +58,19 @@ public class SpringFoxConfig {
     }
 
     private SecurityScheme securityScheme() {
-        GrantType grantType = new AuthorizationCodeGrantBuilder()
-                .tokenEndpoint(new TokenEndpoint(keycloakAdminProperties.getAuthServerTokenUrl(), "oauthtoken"))
-                .tokenRequestEndpoint(
-                        new TokenRequestEndpoint(keycloakAdminProperties.getAuthServerAuthorizeUrl(), keycloakAdminProperties.getClientId(), keycloakAdminProperties.getClientSecret()))
-                .build();
+        GrantType grantType = new AuthorizationCodeGrantBuilder().tokenEndpoint(tokenEndpointBuilder -> tokenEndpointBuilder
+                .url(keycloakAdminProperties.getAuthServerTokenUrl())
+                .tokenName("oauthtoken")
+        )
+        .tokenRequestEndpoint(tokenRequestEndpointBuilder -> tokenRequestEndpointBuilder
+                .url(keycloakAdminProperties.getAuthServerAuthorizeUrl())
+                .clientIdName(keycloakAdminProperties.getClientId())
+                .clientSecretName(keycloakAdminProperties.getClientSecret())
+        )
+        .build();
 
-        SecurityScheme oauthSecurityScheme = new OAuthBuilder().name("spring_oauth")
+        SecurityScheme oauthSecurityScheme = new OAuthBuilder()
+                .name("spring_oauth")
                 .grantTypes(Arrays.asList(grantType))
                 .build();
         return oauthSecurityScheme;
