@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  # simple usecase from lab 2
+  simple-library-lab2-client:
+    image: luechtdiode/oidc-ws-simple-library-lab2-client:f92174120de5822a731da393fe709f8375e2e1c1
+    ports:
+      - 9080:9090
+    environment:
+      CLIENT_ID: simple-library-lab2-client-pkce
+      SERVER_URL: http://simple-library-lab2-server:9081/simple-library-lab2-server
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+    depends_on:
+      - keycloak
+    links:
+      - simple-library-lab2-server
+      - keycloak
+    networks:
+      - simple-library-lab2-network
+      - keycloak-network
+
+  simple-library-lab2-server:
+    image: luechtdiode/oidc-ws-simple-library-lab2-server:f92174120de5822a731da393fe709f8375e2e1c1
+    restart: always
+    environment:
+      JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
+      ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+    ports:
+      - 9081:9091
+    depends_on:
+      - keycloak
+    links:
+      - keycloak
+    networks:
+      - simple-library-lab2-network
+      - keycloak-network
+
+networks:
+  simple-library-lab2-network:
+    driver: bridge

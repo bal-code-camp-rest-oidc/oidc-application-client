@@ -3,23 +3,33 @@ The idea of this application is to provide a user interface to a library
 allowing maintaining and borrowing books depending on the user's role.
 
 # Components
-## Overview
+s## Overview
+                         resourceserver-configuration, 
+                        / getting downstream delegated bearer from LibraryClient
     +------------------+      +----------+
-    | InventoryService +------+          |
-    +-------+----------+      |          |
-            |                 |          |
-    +-------+----------+      |          |      +---------------+
-    | BorrowService    +------+ Library  +------+ LibraryClient |
-    +-------+----------+      | Server   |      +---------------+
-            |                 |          |
-    +-------+----------+      |          |
-    | UserService      +------+          |
-    +------------------+      +----------+
+    | InventoryService +------+          |    resourceserver-configuration,
+    +------------------+      |          |   / getting bearer from LibraryClient       
+                              |          |  /                     
+    +------------------+      |          | /    +---------------+ 
+    | BorrowService    +------+ Library  +------+ LibraryClient |  public, from browser,
+    +------------------+      | Server   |      +---------------+- authorization_code pkce flow
+                              |          |       \
+    +------------------+      |          |        \
+    | UserService      +------+          |          WebClient with
+    +--+---------------+      +----------+          ServletOAuth2AuthorizedClientExchangeFilterFunction
+       |                       \
+       |                         WebClient with ServletBearerExchangeFilterFunction
+       |
+       |  client_credentials flow (confidential)
+       |/  getting clientid & secret from UserService
+    +--+-----------------+
+    | Keycloak User-Repo |
+    +--------------------+                                
 
 ## Library Client
 Web interface
 
-## Library Server
+## Library Facade Server
 REST interface providing endpoints for the library client and aggregating
 services, i.e., keycloak / user service, book service and borrow service.
 
@@ -45,3 +55,12 @@ keycloak-addresses will be used instead of the one instantiated on OpenShift.
 
 Please paste the current **client-secret from the keycloak client** `Keycloak-admin` 
 into the file `src/main/resources/application-dev.yml`
+
+# Run the services via IDE/gradle
+
+To start in local mode, keycloak-addresses should be used instead of the one 
+instantiated on OpenShift.
+
+Therefore its recommended, to start the apps in local mode with the dev-profile.
+a) Use the vm-option `-Dspring.profiles.active=dev`.
+b) Alternatively it's also possible to start with environment-parameter `spring.config.name=application-dev`
