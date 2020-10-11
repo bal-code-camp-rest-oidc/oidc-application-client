@@ -23,21 +23,21 @@ jobs:
         id: vars
         run: echo ::set-output name=tag::$(echo ${GITHUB_SHA})
       - name: Tag latest images with github-sha
-      - run: |
+        run: |
           docker image tag luechtdiode/oidc-ws-library-inventory-service:latest luechtdiode/oidc-ws-library-inventory-service:${{steps.vars.outputs.tag}}
           docker image tag luechtdiode/oidc-ws-library-borrow-service:latest luechtdiode/oidc-ws-library-borrow-service:${{steps.vars.outputs.tag}}
           docker image tag luechtdiode/oidc-ws-library-frontend:latest luechtdiode/oidc-ws-library-frontend:${{steps.vars.outputs.tag}}
           docker image tag luechtdiode/oidc-ws-library-facade-server:latest luechtdiode/oidc-ws-library-facade-server:${{steps.vars.outputs.tag}}
           docker image tag luechtdiode/oidc-ws-library-user-server:latest luechtdiode/oidc-ws-library-user-server:${{steps.vars.outputs.tag}}
       - name: Push the tagged Docker images
-      - run: |
+        run: |
           docker push luechtdiode/oidc-ws-library-inventory-service:${{steps.vars.outputs.tag}}
           docker push luechtdiode/oidc-ws-library-borrow-service:${{steps.vars.outputs.tag}}
           docker push luechtdiode/oidc-ws-library-frontend:${{steps.vars.outputs.tag}}
           docker push luechtdiode/oidc-ws-library-facade-server:${{steps.vars.outputs.tag}}
           docker push luechtdiode/oidc-ws-library-user-server:${{steps.vars.outputs.tag}}
       - name: Push the latest Docker images
-      - run: |
+        run: |
           docker push luechtdiode/oidc-ws-library-inventory-service:latest
           docker push luechtdiode/oidc-ws-library-borrow-service:latest
           docker push luechtdiode/oidc-ws-library-frontend:latest
