@@ -1,4 +1,4 @@
-package com.example.library.server.config;
+package com.example.library.users.config;
 
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
