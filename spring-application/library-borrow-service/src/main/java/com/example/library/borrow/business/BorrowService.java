@@ -43,11 +43,11 @@ public class BorrowService {
 
 
   @Transactional
-  @PreAuthorize("hasRole('LIBRARY_USER')")
+  //@PreAuthorize("hasRole('LIBRARY_USER')")
   public Optional<String> getBorrowerOfBook(UUID borrowBookId) {
     String user = borrowBookRepository.findOneByIdentifier(borrowBookId)
                       .map(BorrowBookEntity::getUserId)
                       .orElse(null);
-    return user == null ? Optional.empty() : Optional.of(user);
+    return user == null ? Optional.of("") : Optional.of(user);
   }
 }
