@@ -28,8 +28,6 @@ public class BookResource extends RepresentationModel<BookResource> {
   @NotNull
   private List<String> authors;
 
-  private boolean borrowed;
-
   public BookResource() {
   }
 
@@ -38,22 +36,19 @@ public class BookResource extends RepresentationModel<BookResource> {
         book.getIsbn(),
         book.getTitle(),
         book.getDescription(),
-        book.getAuthors(),
-        book.isBorrowed());
+        book.getAuthors());
   }
 
   public BookResource(UUID identifier,
                       String isbn,
                       String title,
                       String description,
-                      List<String> authors,
-                      boolean borrowed) {
+                      List<String> authors) {
     this.identifier = identifier;
     this.isbn = isbn;
     this.title = title;
     this.description = description;
     this.authors = authors;
-    this.borrowed = borrowed;
   }
 
   public UUID getIdentifier() {
@@ -96,22 +91,13 @@ public class BookResource extends RepresentationModel<BookResource> {
     this.authors = authors;
   }
 
-  public boolean isBorrowed() {
-    return borrowed;
-  }
-
-  public void setBorrowed(boolean borrowed) {
-    this.borrowed = borrowed;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
     BookResource that = (BookResource) o;
-    return borrowed == that.borrowed
-               && identifier.equals(that.identifier)
+    return identifier.equals(that.identifier)
                && isbn.equals(that.isbn)
                && title.equals(that.title)
                && description.equals(that.description)
@@ -120,7 +106,7 @@ public class BookResource extends RepresentationModel<BookResource> {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), identifier, isbn, title, description, authors, borrowed);
+    return Objects.hash(super.hashCode(), identifier, isbn, title, description, authors);
   }
 
   @Override
@@ -139,8 +125,6 @@ public class BookResource extends RepresentationModel<BookResource> {
                + '\''
                + ", authors="
                + authors
-               + ", borrowed="
-               + borrowed
                + '}';
   }
 }

@@ -31,8 +31,6 @@ public class Book extends AbstractPersistable<Long> {
   @Size(min = 1, max = 2000)
   private String description;
 
-  private boolean borrowed;
-
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> authors = new ArrayList<>();
 
@@ -46,14 +44,12 @@ public class Book extends AbstractPersistable<Long> {
       String isbn,
       String title,
       String description,
-      List<String> authors,
-      boolean borrowed) {
+      List<String> authors) {
     this.identifier = identifier;
     this.isbn = isbn;
     this.title = title;
     this.description = description;
     this.authors = authors;
-    this.borrowed = borrowed;
   }
 
   public UUID getIdentifier() {
@@ -96,22 +92,13 @@ public class Book extends AbstractPersistable<Long> {
     this.authors = authors;
   }
 
-  public boolean isBorrowed() {
-    return borrowed;
-  }
-
-  public void setBorrowed(boolean borrowed) {
-    this.borrowed = borrowed;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
     Book book = (Book) o;
-    return borrowed == book.borrowed
-               && identifier.equals(book.identifier)
+    return identifier.equals(book.identifier)
                && isbn.equals(book.isbn)
                && title.equals(book.title)
                && description.equals(book.description)
@@ -121,7 +108,7 @@ public class Book extends AbstractPersistable<Long> {
   @Override
   public int hashCode() {
     return Objects.hash(
-        super.hashCode(), identifier, isbn, title, description, borrowed, authors);
+        super.hashCode(), identifier, isbn, title, description, authors);
   }
 
   @Override
@@ -138,8 +125,6 @@ public class Book extends AbstractPersistable<Long> {
                + ", description='"
                + description
                + '\''
-               + ", borrowed="
-               + borrowed
                + ", authors="
                + authors
                + '}';
