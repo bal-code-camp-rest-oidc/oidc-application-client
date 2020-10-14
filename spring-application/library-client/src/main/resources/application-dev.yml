@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /library-client
-  port: 9090
+  port: 9089
   error:
     include-stacktrace: never
 
@@ -35,4 +35,4 @@ logging:
 library:
   client:
     redirect-url: '{baseUrl}'
-  server: ${SERVER_URL}
+  server: http://localhost:9090/library-server
