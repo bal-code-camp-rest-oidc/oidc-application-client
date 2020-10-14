@@ -16,19 +16,20 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
-          issuer-uri: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/workshop
       client:
         registration:
           keycloak:
-            clientId: library-client-pkce
-            authorizationGrantType: authorization_code
+            clientId: library-client
+            client-secret: 9584640c-3804-4dcd-997b-93593cfb9ea7
+            authorizationGrantType: client_credentials
             redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
             client-authentication-method: none
             scope: openid
         provider:
           keycloak:
-            issuerUri: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
+            issuerUri: http://localhost:8080/auth/realms/workshop
             user-name-attribute: name
 
 logging:
