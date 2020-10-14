@@ -15,7 +15,11 @@ configurations {
         extendsFrom developmentOnly
     }
 }
+def profiles = 'dev'
 
+bootRun {
+    args = ["--spring.profiles.active=" + profiles]
+}
 bootBuildImage{
     imageName='luechtdiode/oidc-ws-library-facade-server'
 }
