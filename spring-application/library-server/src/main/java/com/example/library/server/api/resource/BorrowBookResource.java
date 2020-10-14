@@ -1,6 +1,9 @@
 package com.example.library.server.api.resource;
 
+
 import com.example.library.api.Book;
+import com.example.library.api.User;
+import com.example.library.server.api.resource.assembler.UserResourceAssembler;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
@@ -9,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class BookResource extends RepresentationModel<BookResource> {
+public class BorrowBookResource extends RepresentationModel<BorrowBookResource> {
 
     private UUID identifier;
 
@@ -28,27 +31,41 @@ public class BookResource extends RepresentationModel<BookResource> {
     @NotNull
     private List<String> authors;
 
-    public BookResource() {
+    private boolean borrowed;
+
+    private UserResource borrowedBy;
+
+    public BorrowBookResource() {
     }
 
-    public BookResource(Book book) {
-        this(book.getIdentifier(),
+    public BorrowBookResource(Book book, User borrowedBy) {
+        this(
+                book.getIdentifier(),
                 book.getIsbn(),
                 book.getTitle(),
                 book.getDescription(),
-                book.getAuthors());
+                book.getAuthors(),
+                borrowedBy != null,
+                borrowedBy != null
+                        ? new UserResourceAssembler().toModel(borrowedBy)
+                        : null);
     }
 
-    public BookResource(UUID identifier,
-                        String isbn,
-                        String title,
-                        String description,
-                        List<String> authors) {
+    public BorrowBookResource(
+            UUID identifier,
+            String isbn,
+            String title,
+            String description,
+            List<String> authors,
+            boolean borrowed,
+            UserResource borrowedBy) {
         this.identifier = identifier;
         this.isbn = isbn;
         this.title = title;
         this.description = description;
         this.authors = authors;
+        this.borrowed = borrowed;
+        this.borrowedBy = borrowedBy;
     }
 
     public UUID getIdentifier() {
@@ -91,22 +108,41 @@ public class BookResource extends RepresentationModel<BookResource> {
         this.authors = authors;
     }
 
+    public boolean isBorrowed() {
+        return borrowed;
+    }
+
+    public void setBorrowed(boolean borrowed) {
+        this.borrowed = borrowed;
+    }
+
+    public UserResource getBorrowedBy() {
+        return borrowedBy;
+    }
+
+    public void setBorrowedBy(UserResource borrowedBy) {
+        this.borrowedBy = borrowedBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        BookResource that = (BookResource) o;
-        return identifier.equals(that.identifier)
+        BorrowBookResource that = (BorrowBookResource) o;
+        return borrowed == that.borrowed
+                && identifier.equals(that.identifier)
                 && isbn.equals(that.isbn)
                 && title.equals(that.title)
                 && description.equals(that.description)
-                && authors.equals(that.authors);
+                && authors.equals(that.authors)
+                && Objects.equals(borrowedBy, that.borrowedBy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), identifier, isbn, title, description, authors);
+        return Objects.hash(
+                super.hashCode(), identifier, isbn, title, description, authors, borrowed, borrowedBy);
     }
 
     @Override
@@ -125,6 +161,10 @@ public class BookResource extends RepresentationModel<BookResource> {
                 + '\''
                 + ", authors="
                 + authors
+                + ", borrowed="
+                + borrowed
+                + ", borrowedBy="
+                + borrowedBy
                 + '}';
     }
 }

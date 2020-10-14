@@ -2,7 +2,10 @@ package com.example.library.server.business;
 
 import com.example.library.api.Book;
 import com.example.library.api.User;
+import com.example.library.server.api.resource.BookListResource;
 import com.example.library.server.api.resource.BookResource;
+import com.example.library.server.api.resource.BorrowBookResource;
+import com.example.library.server.api.resource.assembler.BookResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,9 +33,11 @@ public class BookService {
 
     private final UserService userService;
     private final WebClient webClient;
+    private final BookResourceAssembler bookResourceAssembler;
 
     @Autowired
-    public BookService(UserService userService, WebClient webClient) {
+    public BookService(BookResourceAssembler bookResourceAssembler, UserService userService, WebClient webClient) {
+        this.bookResourceAssembler = bookResourceAssembler;
         this.userService = userService;
         this.webClient = webClient;
     }
@@ -44,7 +48,7 @@ public class BookService {
         return webClient
                 .post()
                 .uri(bookServiceUri + "/books")
-                .body(Mono.just(book), Book.class)
+                .body(Mono.just(bookResourceAssembler.toModel(book)), BookResource.class)
                 .retrieve()
                 .onStatus(
                         s -> s.equals(HttpStatus.UNAUTHORIZED),
@@ -55,9 +59,9 @@ public class BookService {
                 .onStatus(
                         HttpStatus::is5xxServerError,
                         cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-                .bodyToMono(BookResource.class)
+                .bodyToMono(BorrowBookResource.class)
                 .log()
-                .blockOptional().map(r -> r.getIdentifier()).orElse(null)
+                .blockOptional().map(BorrowBookResource::getIdentifier).orElse(null)
                 ;
     }
 
@@ -67,7 +71,7 @@ public class BookService {
         return webClient
                 .put()
                 .uri(bookServiceUri + "/books")
-                .body(Mono.just(book), Book.class)
+                .body(Mono.just(bookResourceAssembler.toModel(book)), BookResource.class)
                 .retrieve()
                 .onStatus(
                         s -> s.equals(HttpStatus.UNAUTHORIZED),
@@ -78,9 +82,9 @@ public class BookService {
                 .onStatus(
                         HttpStatus::is5xxServerError,
                         cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-                .bodyToMono(BookResource.class)
+                .bodyToMono(BorrowBookResource.class)
                 .log()
-                .blockOptional().map(r -> r.getIdentifier()).orElse(null)
+                .blockOptional().map(BorrowBookResource::getIdentifier).orElse(null)
                 ;
     }
 
@@ -95,7 +99,8 @@ public class BookService {
                 .get()
                 .uri(bookServiceUri + "/books/" + uuid.toString())
                 .retrieve()
-                .bodyToMono(Book.class)
+                .bodyToMono(BookResource.class)
+                .map(bookResourceAssembler::fromModel)
                 .log()
                 .blockOptional()
                 ;
@@ -144,9 +149,9 @@ public class BookService {
                 .get()
                 .uri(bookServiceUri + "/books")
                 .retrieve()
-                .bodyToMono(Book[].class)
+                .bodyToMono(BookListResource.class)
+                .map(bookResourceAssembler::fromCollectionModel)
                 .log()
-                .map(Arrays::asList)
                 .block()
                 ;
     }
@@ -238,7 +243,7 @@ public class BookService {
                         HttpStatus::is5xxServerError,
                         cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
                 .bodyToMono(String.class)
-                .block()
+                .blockOptional().orElse(null)
                 ;
     }
 }
