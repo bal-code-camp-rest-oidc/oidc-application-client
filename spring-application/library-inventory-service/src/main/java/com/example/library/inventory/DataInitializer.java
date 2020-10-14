@@ -62,8 +62,7 @@ public class DataInitializer implements CommandLineRunner {
                     + "Object Mentor to distill their best agile practice of cleaning code “on the fly” into a book "
                     + "that will instill within you the values of a software craftsman and make you a better "
                     + "programmer—but only if you work at it.",
-                Collections.singletonList("Bob C. Martin"),
-                false),
+                Collections.singletonList("Bob C. Martin")),
             new Book(
                 BOOK_CLOUD_NATIVE_IDENTIFIER,
                 "9781449374648",
@@ -73,8 +72,7 @@ public class DataInitializer implements CommandLineRunner {
                     + "maintain their competitive edge and stay well ahead of the competition. "
                     + "This practical guide shows Java/JVM developers how to build better software, "
                     + "faster, using Spring Boot, Spring Cloud, and Cloud Foundry.",
-                Arrays.asList("Josh Long", "Kenny Bastiani"),
-                false),
+                Arrays.asList("Josh Long", "Kenny Bastiani")),
             new Book(
                 BOOK_SPRING_ACTION_IDENTIFIER,
                 "9781617291203",
@@ -85,8 +83,7 @@ public class DataInitializer implements CommandLineRunner {
                     + "short snippets and an ongoing example as you learn to build simple and efficient "
                     + "J2EE applications. Author Craig Walls has a special knack for crisp and "
                     + "entertaining examples that zoom in on the features and techniques you really need.",
-                Collections.singletonList("Craig Walls"),
-                false),
+                Collections.singletonList("Craig Walls")),
             new Book(
                 BOOK_DEVOPS_IDENTIFIER,
                 "9781942788003",
@@ -95,7 +92,7 @@ public class DataInitializer implements CommandLineRunner {
                     + "Patrick Debois and John Willis developed this book for anyone looking to transform "
                     + "their IT organization—especially those who want to make serious changes through the "
                     + "DevOps methodology to increase productivity, profitability and win the marketplace.",
-                Arrays.asList("Gene Kim", "Jez Humble", "Patrick Debois"), false))
+                Arrays.asList("Gene Kim", "Jez Humble", "Patrick Debois")))
             .map(bookRepository::save)
             .collect(Collectors.toList());
     logger.info("Created {} books", bookList.size());

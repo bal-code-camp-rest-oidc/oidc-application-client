@@ -60,8 +60,7 @@ public class BookRestController {
         bookResource.getIsbn(),
         bookResource.getTitle(),
         bookResource.getDescription(),
-        bookResource.getAuthors(),
-        false);
+        bookResource.getAuthors());
 
     UUID identifier = bookService.create(book);
 
