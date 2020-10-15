@@ -1,6 +1,7 @@
 package com.example.library.client.web;
 
 import com.example.library.api.User;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class BookResource {
+public class BorrowBookResource extends RepresentationModel<BorrowBookResource> {
 
     private UUID identifier;
 
@@ -24,7 +25,7 @@ public class BookResource {
 
     private User borrowedBy;
 
-    public BookResource() {
+    public BorrowBookResource() {
     }
 
     public UUID getIdentifier() {
@@ -115,14 +116,14 @@ public class BookResource {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        BookResource bookResource = (BookResource) o;
-        return borrowed == bookResource.borrowed
-                && identifier.equals(bookResource.identifier)
-                && isbn.equals(bookResource.isbn)
-                && title.equals(bookResource.title)
-                && description.equals(bookResource.description)
-                && authors.equals(bookResource.authors)
-                && Objects.equals(borrowedBy, bookResource.borrowedBy);
+        BorrowBookResource borrowBookResource = (BorrowBookResource) o;
+        return borrowed == borrowBookResource.borrowed
+                && identifier.equals(borrowBookResource.identifier)
+                && isbn.equals(borrowBookResource.isbn)
+                && title.equals(borrowBookResource.title)
+                && description.equals(borrowBookResource.description)
+                && authors.equals(borrowBookResource.authors)
+                && Objects.equals(borrowedBy, borrowBookResource.borrowedBy);
     }
 
     @Override

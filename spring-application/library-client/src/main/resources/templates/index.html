@@ -46,18 +46,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="bookResource : ${books}">
-            <td th:text="${bookResource.authors}">Author</td>
-            <td th:text="${bookResource.title}">Title</td>
-            <td th:text="${bookResource.description}">descr</td>
-            <td th:text="${bookResource.isbn}">isbn</td>
+        <tr th:each="borrowBookResource : ${books}">
+            <td th:text="${borrowBookResource.authors}">Author</td>
+            <td th:text="${borrowBookResource.title}">Title</td>
+            <td th:text="${borrowBookResource.description}">descr</td>
+            <td th:text="${borrowBookResource.isbn}">isbn</td>
             <td><a class="btn btn-primary" href="#" role="button" sec:authorize="hasRole('LIBRARY_USER')"
-                   th:href="@{'/return?identifier=' + ${bookResource.identifier}}"
-                   th:unless="${!bookResource.returnBookAllowed(#authentication.getPrincipal())}">Return</a><a class="btn btn-primary" href="#"
+                   th:href="@{'/return?identifier=' + ${borrowBookResource.identifier}}"
+                   th:unless="${!borrowBookResource.returnBookAllowed(#authentication.getPrincipal())}">Return</a><a class="btn btn-primary" href="#"
                                                                                role="button"
                                                                                sec:authorize="hasRole('LIBRARY_USER')"
-                                                                               th:href="@{'/borrow?identifier=' + ${bookResource.identifier}}"
-                                                                               th:unless="${bookResource.borrowed}">Borrow</a>
+                                                                               th:href="@{'/borrow?identifier=' + ${borrowBookResource.identifier}}"
+                                                                               th:unless="${borrowBookResource.borrowed}">Borrow</a>
             </td>
         </tr>
         </tbody>
