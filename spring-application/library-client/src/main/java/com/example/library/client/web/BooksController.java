@@ -62,10 +62,10 @@ public class BooksController {
                .onStatus(
                    HttpStatus::is5xxServerError,
                    cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-               .bodyToMono(BookListResource.class)
+               .bodyToMono(BorrowBookListResource.class)
                .log()
-               .map(BookListResource::get_embedded)
-               .map(EmbeddedBookListResource::getBookResourceList)
+               .map(BorrowBookListResource::get_embedded)
+               .map(EmbeddedBorrowBookListResource::getBorrowBookResourceList)
                .map(
                    c -> {
                      model.addAttribute("books", c);
@@ -102,7 +102,7 @@ public class BooksController {
              .onStatus(
                  HttpStatus::is5xxServerError,
                  cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-             .bodyToMono(BookResource.class)
+             .bodyToMono(BorrowBookResource.class)
              .log()
              .block();
 
@@ -129,7 +129,7 @@ public class BooksController {
         .onStatus(
             HttpStatus::is5xxServerError,
             cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-        .bodyToMono(BookResource.class)
+        .bodyToMono(BorrowBookResource.class)
         .log()
         .block();
 
@@ -156,7 +156,7 @@ public class BooksController {
         .onStatus(
             HttpStatus::is5xxServerError,
             cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
-        .bodyToMono(BookResource.class)
+        .bodyToMono(BorrowBookResource.class)
         .log()
         .block();
 
