@@ -39,6 +39,8 @@ test {
 }
 
 dependencies {
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
     implementation project(':keycloak-client')
     //implementation project(':library-api')
     implementation('ch.baloise.oidc:library-api:1.0.0-SNAPSHOT')
