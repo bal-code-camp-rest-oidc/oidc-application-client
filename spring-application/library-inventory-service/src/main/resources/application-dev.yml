@@ -30,3 +30,26 @@ server:
   port: 9092
   servlet:
     context-path: /library-inventory
+
+library:
+  server:
+    keycloak:
+      serverUrl: http://localhost:8080/auth
+      realmId: workshop
+
+# Properties provided by com.example.library.users.properties.SwaggerProperties
+swagger:
+  keycloak:
+    clientId: library-client
+    clientSecret: 9584640c-3804-4dcd-997b-93593cfb9ea7
+  api-info:
+    title: "OIDC Sample: Library Inventory Service"
+    description: "This service provides the inventory of books that can be borrowed in one library."
+    version: "1.0.0"
+    termsOfServiceUrl: "http://www.baloise.ch/terms-of-service"
+    license: "Apache 2.0"
+    licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0"
+    contact:
+      name: "John Doe"
+      url: "http://www.baloise.ch"
+      email: "john.doe@baloise.ch"
