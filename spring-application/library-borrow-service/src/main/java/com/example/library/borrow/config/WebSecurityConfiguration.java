@@ -1,8 +1,6 @@
 package com.example.library.borrow.config;
 
 import com.example.library.borrow.properties.swagger.SwaggerKeycloakProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -110,7 +108,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*", "https://localhost:9090", "http://localhost:9090"));
+    configuration.setAllowedOrigins(Arrays.asList("*", "https://localhost:9091", "http://localhost:9091"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
     configuration.setAllowCredentials(true);
