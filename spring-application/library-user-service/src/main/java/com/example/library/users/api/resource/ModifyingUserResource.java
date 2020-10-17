@@ -25,9 +25,9 @@ public class ModifyingUserResource extends UserResource {
             String lastName,
             String password,
             List<String> roles) {
-        super(identifier, userId, email, firstName, lastName);
+        super(identifier, userId, email, firstName, lastName, roles);
         this.password = password;
-        this.roles = roles;
+        this.roles.addAll(roles);
     }
 
     public String getPassword() {
