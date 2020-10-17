@@ -1,7 +1,7 @@
 package com.example.library.users.config;
 
 import com.example.library.users.properties.KeycloakAdminProperties;
-import com.example.library.users.properties.SwaggerApiInfoProperties;
+import com.example.library.users.properties.swagger.SwaggerApiInfoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.AuthorizationCodeGrantBuilder;
@@ -37,8 +37,8 @@ public class SpringFoxConfig {
     /**
      * Constructor injecting properties from application.yml.
      *
-     * @param keycloakAdminProperties
-     * @param swaggerApiInfoProperties
+     * @param keycloakAdminProperties  the properties we need to access properties in the YAML to access keycloak over the admin client.
+     * @param swaggerApiInfoProperties the properties to access the API info in the YAML.
      */
     public SpringFoxConfig(KeycloakAdminProperties keycloakAdminProperties, SwaggerApiInfoProperties swaggerApiInfoProperties) {
         this.keycloakAdminProperties = keycloakAdminProperties;

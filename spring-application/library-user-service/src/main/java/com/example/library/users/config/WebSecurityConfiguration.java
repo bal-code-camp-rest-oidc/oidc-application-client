@@ -1,6 +1,6 @@
 package com.example.library.users.config;
 
-import com.example.library.users.properties.SwaggerKeycloakProperties;
+import com.example.library.users.properties.swagger.SwaggerKeycloakProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -50,6 +50,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(
+                "/v2/api-docs",
+                "/v3/api-docs",
+                "/configuration/ui/**",
+                "/swagger-resources/**",
+                "/configuration/security/**",
+                "/swagger-ui/**",
+                "/swagger-ui/index.html",
+                "/webjars/**",
+                "/index.html");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,21 +77,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
-    }
-
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(
-                "/v2/api-docs",
-                "/v3/api-docs",
-                "/configuration/ui/**",
-                "/swagger-resources/**",
-                "/configuration/security/**",
-                "/swagger-ui/**",
-                "/swagger-ui/index.html",
-                "/webjars/**",
-                "/index.html");
     }
 
     @Bean
