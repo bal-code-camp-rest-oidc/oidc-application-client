@@ -5,11 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +29,7 @@ public class BorrowController {
     })
     @PostMapping("/{borrowBookId}")
     public void borrowBookById(
-            @PathVariable("borrowBookId") String bookId, @AuthenticationPrincipal OidcUser principal) {
+            @PathVariable("borrowBookId") String bookId, Principal principal) {
         //todo: REST call, validate if book exists
         borrowService.borrowById(UUID.fromString(bookId), principal.getName());
     }

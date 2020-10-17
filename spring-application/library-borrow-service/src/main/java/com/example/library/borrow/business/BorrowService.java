@@ -3,10 +3,10 @@ package com.example.library.borrow.business;
 import com.example.library.borrow.dataaccess.BorrowBookEntity;
 import com.example.library.borrow.dataaccess.BorrowBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,7 +21,8 @@ public class BorrowService {
   }
 
   @Transactional
-  @PreAuthorize("hasRole('LIBRARY_USER')")
+  //@PreAuthorize("hasRole('LIBRARY_USER')")
+  @RolesAllowed("LIBRARY_USER")
   public void borrowById(UUID bookIdentifier, String userId) {
     if (bookIdentifier == null || userId == null) {
       throw new IllegalArgumentException("missing book or user ID");
@@ -31,7 +32,8 @@ public class BorrowService {
   }
 
   @Transactional
-  @PreAuthorize("hasRole('LIBRARY_USER')")
+  //@PreAuthorize("hasRole('LIBRARY_USER')")
+  @RolesAllowed("LIBRARY_USER")
   public void returnById(UUID borrowBookId) {
 
     if (borrowBookId == null) {

@@ -1,7 +1,6 @@
 package com.example.library.server.api;
 
 import com.example.library.api.Book;
-import com.example.library.api.User;
 import com.example.library.server.api.resource.BorrowBookResource;
 import com.example.library.server.api.resource.assembler.BorrowBookResourceAssembler;
 import com.example.library.server.business.BookService;
@@ -9,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.UUID;
 
 /**
@@ -50,14 +49,14 @@ public class BookRestController {
 
     @PostMapping("/{bookId}/borrow")
     public ResponseEntity<BorrowBookResource> borrowBookById(
-            @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal User libraryUser) {
+            @PathVariable("bookId") UUID bookId, Principal principal) {
         return bookService
                 .findByIdentifier(bookId)
                 .map(
                         b -> {
-                            bookService.borrowById(bookId, libraryUser.getUserName());
+                            bookService.borrowById(bookId, principal.getName());
                             return bookService
-                                    .findWithDetailsByIdentifier(b.getIdentifier())
+                                    .findByIdentifier(b.getIdentifier())
                                     .map(bb -> ResponseEntity.ok(borrowBookResourceAssembler.toModel(bb)))
                                     .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                         })
@@ -66,14 +65,14 @@ public class BookRestController {
 
     @PostMapping("/{bookId}/return")
     public ResponseEntity<BorrowBookResource> returnBookById(
-            @PathVariable("bookId") UUID bookId, @AuthenticationPrincipal User libraryUser) {
+            @PathVariable("bookId") UUID bookId, Principal principal) {
         return bookService
                 .findByIdentifier(bookId)
                 .map(
                         b -> {
-                            bookService.returnById(bookId, libraryUser.getUserName());
+                            bookService.returnById(bookId, principal.getName());
                             return bookService
-                                    .findWithDetailsByIdentifier(b.getIdentifier())
+                                    .findByIdentifier(b.getIdentifier())
                                     .map(bb -> ResponseEntity.ok(borrowBookResourceAssembler.toModel(bb)))
                                     .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                         })

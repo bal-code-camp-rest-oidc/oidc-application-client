@@ -9,15 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -47,7 +39,7 @@ public class BookRestController {
 
   @GetMapping("/{bookId}")
   public ResponseEntity<BookResource> getBookById(@PathVariable("bookId") UUID bookIdentifier) {
-    return bookService.findWithDetailsByIdentifier(bookIdentifier)
+    return bookService.findByIdentifier(bookIdentifier)
                .map(bookResourceAssembler::toModel)
                .map(ResponseEntity::ok)
                .orElse(ResponseEntity.notFound().build());
@@ -64,7 +56,7 @@ public class BookRestController {
 
     UUID identifier = bookService.create(book);
 
-    return bookService.findWithDetailsByIdentifier(identifier)
+    return bookService.findByIdentifier(identifier)
                .map(bookResourceAssembler::toModel)
                .map(b -> {
                  URI location =

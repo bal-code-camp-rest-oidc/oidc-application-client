@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface BookRepository extends JpaRepository<Book, UUID> {
   Optional<Book> findOneByIdentifier(UUID identifier);
 
-  @EntityGraph(attributePaths = {"borrowedBy", "authors"})
+  @EntityGraph(attributePaths = {"authors"})
   Optional<Book> findOneWithDetailsByIdentifier(UUID identifier);
 
   void deleteBookByIdentifier(UUID identifier);

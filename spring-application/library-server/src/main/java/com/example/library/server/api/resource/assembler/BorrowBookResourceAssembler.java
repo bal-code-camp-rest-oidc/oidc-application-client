@@ -43,12 +43,12 @@ public class BorrowBookResourceAssembler extends RepresentationModelAssemblerSup
         borrowBookResource.add(
                 linkTo(
                         methodOn(BookRestController.class)
-                                .borrowBookById(book.getIdentifier(), new User()))
+                                .borrowBookById(book.getIdentifier(), null))
                         .withRel("borrow"));
         borrowBookResource.add(
                 linkTo(
                         methodOn(BookRestController.class)
-                                .returnBookById(book.getIdentifier(), new User()))
+                                .returnBookById(book.getIdentifier(), null))
                         .withRel("return"));
         return borrowBookResource;
     }

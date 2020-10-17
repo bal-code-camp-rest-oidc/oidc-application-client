@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -107,7 +108,8 @@ public class BookService {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('LIBRARY_USER')")
+    //@PreAuthorize("hasRole('LIBRARY_USER')")
+    @RolesAllowed("LIBRARY_USER")
     public void borrowById(UUID bookIdentifier, String userName) {
         if (bookIdentifier == null || userName == null) {
             return;
@@ -119,12 +121,12 @@ public class BookService {
                                 .ifPresent(
                                         b -> {
                                             doBorrow(b, u);
-                                            this.update(b);
                                         }));
     }
 
     @Transactional
-    @PreAuthorize("hasRole('LIBRARY_USER')")
+    //@PreAuthorize("hasRole('LIBRARY_USER')")
+    @RolesAllowed("LIBRARY_USER")
     public void returnById(UUID bookIdentifier, String userName) {
 
         if (bookIdentifier == null || userName == null) {
@@ -139,7 +141,6 @@ public class BookService {
                                         .ifPresent(
                                                 b -> {
                                                     doReturn(b, u);
-                                                    update(b);
                                                 }));
     }
 
@@ -179,7 +180,7 @@ public class BookService {
         String borrowedBy = getBorrowedByOfBook(book);
 
         if (borrowedBy != null && !borrowedBy.equals("")) {
-            if (user.getUserName().equals(borrowedBy)) {
+            if (user.getIdentifier().toString().equals(borrowedBy)) {
                 webClient
                         .delete()
                         .uri(borrowServiceUri + "/borrowBooks/" + book.getIdentifier())
