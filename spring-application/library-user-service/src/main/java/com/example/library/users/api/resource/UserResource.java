@@ -7,6 +7,7 @@ import com.example.library.api.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,19 +32,28 @@ public class UserResource extends RepresentationModel<UserResource> {
     @Size(min = 1, max = 100)
     private String userId;
 
+    private List<String> roles;
+
     public UserResource() {
     }
 
     public UserResource(User user) {
-        this(user.getIdentifier(), user.getUserName(), user.getEmail(), user.getFirstName(), user.getLastName());
+        this(
+                user.getIdentifier(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRoles());
     }
 
-    public UserResource(UUID identifier, String userid, String email, String firstName, String lastName) {
+    public UserResource(UUID identifier, String userid, String email, String firstName, String lastName, List<String> roles) {
         this.identifier = identifier;
-        this.userId = userId;
+        this.userId = userid;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.roles = roles;
     }
 
     public UUID getIdentifier() {
@@ -86,6 +96,14 @@ public class UserResource extends RepresentationModel<UserResource> {
         this.lastName = lastName;
     }
 
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,14 +111,16 @@ public class UserResource extends RepresentationModel<UserResource> {
         if (!super.equals(o)) return false;
         UserResource that = (UserResource) o;
         return identifier.equals(that.identifier)
+                && userId.equals(that.userId)
                 && email.equals(that.email)
                 && firstName.equals(that.firstName)
-                && lastName.equals(that.lastName);
+                && lastName.equals(that.lastName)
+                && Objects.equals(roles, that.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), identifier, email, firstName, lastName);
+        return Objects.hash(super.hashCode(), identifier, userId, email, firstName, lastName);
     }
 
     @Override
@@ -108,6 +128,9 @@ public class UserResource extends RepresentationModel<UserResource> {
         return "UserResource{"
                 + "identifier="
                 + identifier
+                + '\''
+                + "userId="
+                + userId
                 + ", email='"
                 + email
                 + '\''
@@ -116,6 +139,9 @@ public class UserResource extends RepresentationModel<UserResource> {
                 + '\''
                 + ", lastName='"
                 + lastName
+                + '\''
+                + ", roles='"
+                + roles
                 + '\''
                 + '}';
     }

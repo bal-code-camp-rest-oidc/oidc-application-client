@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static ch.baloise.keycloak.client.admin.mapper.UserMapper.map;
+
 /**
  * Specific implementation providing some basic functionality to cope with the admin API accessing a Keyclaok server.
  * Please ensure having configured a client as described in
@@ -81,7 +83,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
         RealmResource realmResource = keycloak.realm(realmId);
         UsersResource usersResource = realmResource.users();
         for (UserRepresentation currentUserRepresentation : usersResource.search(emailAddress, offset, maxAmount)) {
-            outUsers.add(UserMapper.map(currentUserRepresentation));
+            outUsers.add(map(currentUserRepresentation));
         }
         return outUsers;
     }
@@ -93,8 +95,10 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
         }
         RealmResource realmResource = keycloak.realm(realmId);
         UsersResource usersResource = realmResource.users();
-        List<UserRepresentation> users = usersResource.search(userId, true);
-        return users.stream().map(UserMapper::map).findFirst();
+        return usersResource.list().stream()
+                .filter(u -> u.getId().equals(userId))
+                .map(UserMapper::map)
+                .findFirst();
     }
 
     @Override
@@ -114,7 +118,7 @@ public class KeycloakAdminFacadeImpl implements KeycloakAdminFacade {
                     .roles()
                     .get(roleId);
             for (UserRepresentation currentUser : roleResource.getRoleUserMembers()) {
-                outUsers.add(UserMapper.map(currentUser));
+                outUsers.add(map(currentUser));
             }
         } catch (NotFoundException notFoundProblem) {
             //nothing found

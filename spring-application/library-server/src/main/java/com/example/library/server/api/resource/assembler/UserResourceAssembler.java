@@ -1,5 +1,6 @@
 package com.example.library.server.api.resource.assembler;
 
+import com.example.library.api.Book;
 import com.example.library.api.User;
 import com.example.library.server.api.UserRestController;
 import com.example.library.server.api.resource.UserResource;
@@ -32,4 +33,14 @@ public class UserResourceAssembler extends RepresentationModelAssemblerSupport<U
         linkTo(methodOn(UserRestController.class).getAllUsers()).withSelfRel());
     return userResources;
   }
+
+    public User fromModel(UserResource user) {
+      return new User(
+              user.getIdentifier(),
+              user.getUserId(),
+              user.getEmail(),
+              user.getFirstName(),
+              user.getLastName(),
+              user.getRoles());
+    }
 }

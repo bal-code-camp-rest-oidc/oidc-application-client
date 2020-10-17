@@ -39,7 +39,9 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roles = roles;
+        if (roles != null) {
+            this.roles.addAll(roles);
+        }
     }
 
     public UUID getIdentifier() {
@@ -87,7 +89,9 @@ public class User {
     }
 
     public void setRoles(List<String> roles) {
-        this.roles = roles;
+        if (roles != null) {
+            this.roles.addAll(roles);
+        }
     }
 
     @Override
