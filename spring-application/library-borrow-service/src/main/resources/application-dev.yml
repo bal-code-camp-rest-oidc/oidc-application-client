@@ -6,6 +6,7 @@ management:
   endpoint:
     health:
       show-details: always
+
 spring:
   jpa:
     open-in-view: false
@@ -24,9 +25,35 @@ logging:
     org:
       springframework:
         security: debug
+
 server:
   error:
     include-stacktrace: never
   port: 9091
   servlet:
     context-path: /library-borrow
+
+library:
+  user-srv: http://localhost:9093/library-users
+  inventory-srv: http://localhost:9092/library-inventory
+  server:
+    keycloak:
+      serverUrl: http://localhost:8080/auth
+      realmId: workshop
+
+# Properties provided by com.example.library.users.properties.SwaggerProperties
+swagger:
+  keycloak:
+    clientId: library-client
+    clientSecret: 9584640c-3804-4dcd-997b-93593cfb9ea7
+  api-info:
+    title: "OIDC Sample: Library Borrow Service"
+    description: "This service provides the feature to borrow a book from any library that is connected to this network."
+    version: "1.0.0"
+    termsOfServiceUrl: "http://www.baloise.ch/terms-of-service"
+    license: "Apache 2.0"
+    licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0"
+    contact:
+      name: "John Doe"
+      url: "http://www.baloise.ch"
+      email: "john.doe@baloise.ch"

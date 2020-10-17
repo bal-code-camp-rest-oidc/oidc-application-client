@@ -1,4 +1,4 @@
-package com.example.library.users.properties;
+package com.example.library.borrow.properties.swagger;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

@@ -34,3 +34,24 @@ server:
 library:
   user-srv: ${USER_SERVICE_URI}
   inventory-srv: ${INVENTORY_SERVICE_URI}
+  server:
+    keycloak:
+      serverUrl: ${KEYCLOAK_SERVER_URI}
+      realmId: ${KEYCLOAK_REALM_ID}
+
+# Properties provided by com.example.library.users.properties.SwaggerProperties
+swagger:
+  keycloak:
+    clientId: ${SWAGGER_CLIENT_ID}
+    clientSecret: ${SWAGGER_CLIENT_SECRET}
+  api-info:
+    title: "OIDC Sample: Library Borrow Service"
+    description: "This service provides the feature to borrow a book from any library that is connected to this network."
+    version: "1.0.0"
+    termsOfServiceUrl: "http://www.baloise.ch/terms-of-service"
+    license: "Apache 2.0"
+    licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0"
+    contact:
+      name: "John Doe"
+      url: "http://www.baloise.ch"
+      email: "john.doe@baloise.ch"
