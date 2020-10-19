@@ -55,8 +55,10 @@ hs_err_pid*
 bin/
 
 # Project specifics
-/docker-compose-setup/mysql/data/
+/docker-compose-setup/apacheds/data_saved/
 /docker-compose-setup/apacheds/data/
+/docker-compose-setup/mysql/data_saved/
+/docker-compose-setup/mysql/data/
 
 **/build/
 out/
