@@ -39,7 +39,7 @@ library:
       serverUrl: http://localhost:8080/auth
       realmId: workshop
       clientId: keycloak-admin
-      clientSecret: 9a1a383c-361d-40b2-9adb-3fdcc7014c76
+      clientSecret: c9c23003-9ee9-4d5b-acd0-bb9a2c3bf57d
 
 swagger:
   keycloak:

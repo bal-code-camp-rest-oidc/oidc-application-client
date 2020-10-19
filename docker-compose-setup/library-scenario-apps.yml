@@ -67,7 +67,7 @@ services:
       - 9093:9093
     environment:
       KEYCLOAK_CLIENT_ID: keycloak-admin
-      KEYCLOAK_CLIENT_SECRET: 9a1a383c-361d-40b2-9adb-3fdcc7014c76
+      KEYCLOAK_CLIENT_SECRET: c9c23003-9ee9-4d5b-acd0-bb9a2c3bf57d
       JWK_SET_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop/protocol/openid-connect/certs
       ISSUER_URI: http://${KEYCLOAK_HOST}:8080/auth/realms/workshop
       KEYCLOAK_REALM_ID: workshop
