@@ -62,5 +62,5 @@ To start in local mode, keycloak-addresses should be used instead of the one
 instantiated on OpenShift.
 
 Therefore its recommended, to start the apps in local mode with the dev-profile.
-a) Use the vm-option `-Dspring.profiles.active=dev`.
-b) Alternatively it's also possible to start with environment-parameter `spring.config.name=application-dev`
+1. Use the vm-option `-Dspring.profiles.active=dev`.
+2. Alternatively it's also possible to start with environment-parameter `spring.config.name=application-dev`
