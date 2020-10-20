@@ -47,6 +47,7 @@ services:
       - apacheds
     restart: always
     environment:
+      PROXY_ADDRESS_FORWARDING: true
       DB_VENDOR: MYSQL
       DB_ADDR: mysql
       DB_PORT: 3310
