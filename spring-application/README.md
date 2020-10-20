@@ -3,7 +3,7 @@ The idea of this application is to provide a user interface to a library
 allowing maintaining and borrowing books depending on the user's role.
 
 # Components
-s## Overview
+## Overview
                          resourceserver-configuration, 
                         / getting downstream delegated bearer from LibraryClient
     +------------------+      +----------+
