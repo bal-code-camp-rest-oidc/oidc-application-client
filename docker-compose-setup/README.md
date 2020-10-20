@@ -25,6 +25,7 @@ Start the Keycloak-Application described as above, using docker-compose syntax:
 *(starting from project-root)*
 ```bash
 cd docker-compose-setup
+export KEYCLOAK_HOST=localhost
 docker-compose -f docker-compose.yml up -d
 ```
 
