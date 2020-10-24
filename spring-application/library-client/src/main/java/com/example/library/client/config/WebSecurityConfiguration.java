@@ -1,6 +1,7 @@
 package com.example.library.client.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.example.library.client.web.CustomLogoutSuccessHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -10,6 +11,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,18 +20,6 @@ import java.util.stream.Collectors;
 
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    /**
-     * Provides the configured issuer base URL from application.yml.
-     */
-    @Value("${spring.security.oauth2.client.provider.keycloak.issuerUri}")
-    private String issuerBaseUrl;
-
-    /**
-     * Provides the new property as configured in application.yml.
-     */
-    @Value("${library.client.redirect-url}")
-    private String redirectUrl;
 
     /**
      * Provides the identifier we use for the claim identifying groups.
@@ -41,6 +31,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     private static final String ROLE_PREFIX = "ROLE_";
 
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new CustomLogoutSuccessHandler();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,8 +45,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                //.logout().invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl("/login?logout").deleteCookies("JSESSIONID")
-                .logout().logoutSuccessUrl(issuerBaseUrl + "/protocol/openid-connect/logout?redirect_uri=" + redirectUrl)
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessHandler(logoutSuccessHandler())
+                .deleteCookies("JSESSIONID")
                 .and()
                 .oauth2Client()
                 .and()
