@@ -33,6 +33,4 @@ logging:
         web: info
 
 library:
-  client:
-    redirect-url: '{baseUrl}'
   server: ${SERVER_URL}
