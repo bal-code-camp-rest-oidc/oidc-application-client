@@ -12,12 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.security.RolesAllowed;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -126,21 +129,22 @@ public class BookService {
 
     @Transactional
     //@PreAuthorize("hasRole('LIBRARY_USER')")
-    @RolesAllowed("LIBRARY_USER")
-    public void returnById(UUID bookIdentifier, String userName) {
-
-        if (bookIdentifier == null || userName == null) {
+    @RolesAllowed({"LIBRARY_USER", "LIBRARY_ADMIN"})
+    public void returnById(UUID bookIdentifier, Principal currentUser) {
+        if (bookIdentifier == null || currentUser == null) {
             return;
         }
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final boolean isAdmin = authentication.getAuthorities().stream().anyMatch(ga -> ga.getAuthority().equals("SCOPE_library_admin"));
         userService
-                .findByIdentifier(userName)
+                .findByIdentifier(currentUser.getName())
                 .ifPresent(
                         u ->
                                 findByIdentifier(bookIdentifier)
                                         .ifPresent(
                                                 b -> {
-                                                    doReturn(b, u);
+                                                    doReturn(
+                                                            b, u, isAdmin);
                                                 }));
     }
 
@@ -176,11 +180,11 @@ public class BookService {
         ;
     }
 
-    private void doReturn(Book book, User user) {
+    private void doReturn(Book book, User user, boolean isAdmin) {
         String borrowedBy = getBorrowedByOfBook(book);
 
         if (borrowedBy != null && !borrowedBy.equals("")) {
-            if (user.getIdentifier().toString().equals(borrowedBy)) {
+            if (isAdmin || user.getIdentifier().toString().equals(borrowedBy)) {
                 webClient
                         .delete()
                         .uri(borrowServiceUri + "/borrowBooks/" + book.getIdentifier())
