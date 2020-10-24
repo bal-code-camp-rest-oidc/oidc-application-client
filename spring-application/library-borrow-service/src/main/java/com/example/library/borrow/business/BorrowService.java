@@ -13,43 +13,40 @@ import java.util.UUID;
 @Service
 public class BorrowService {
 
-  private final BorrowBookRepository borrowBookRepository;
+    private final BorrowBookRepository borrowBookRepository;
 
-  @Autowired
-  public BorrowService(BorrowBookRepository borrowBookRepository) {
-    this.borrowBookRepository = borrowBookRepository;
-  }
-
-  @Transactional
-  //@PreAuthorize("hasRole('LIBRARY_USER')")
-  @RolesAllowed("LIBRARY_USER")
-  public void borrowById(UUID bookIdentifier, String userId) {
-    if (bookIdentifier == null || userId == null) {
-      throw new IllegalArgumentException("missing book or user ID");
+    @Autowired
+    public BorrowService(BorrowBookRepository borrowBookRepository) {
+        this.borrowBookRepository = borrowBookRepository;
     }
 
-    borrowBookRepository.save(new BorrowBookEntity(bookIdentifier, userId));
-  }
+    @Transactional
+    @RolesAllowed("LIBRARY_USER")
+    public void borrowById(UUID bookIdentifier, String userId) {
+        if (bookIdentifier == null || userId == null) {
+            throw new IllegalArgumentException("missing book or user ID");
+        }
 
-  @Transactional
-  //@PreAuthorize("hasRole('LIBRARY_USER')")
-  @RolesAllowed("LIBRARY_USER")
-  public void returnById(UUID borrowBookId) {
-
-    if (borrowBookId == null) {
-      throw new IllegalArgumentException("missing borrow book ID");
+        borrowBookRepository.save(new BorrowBookEntity(bookIdentifier, userId));
     }
 
-    borrowBookRepository.deleteBookByIdentifier(borrowBookId);
-  }
+    @Transactional
+    @RolesAllowed({"LIBRARY_USER", "LIBRARY_ADMIN"})
+    public void returnById(UUID borrowBookId) {
+
+        if (borrowBookId == null) {
+            throw new IllegalArgumentException("missing borrow book ID");
+        }
+
+        borrowBookRepository.deleteBookByIdentifier(borrowBookId);
+    }
 
 
-  @Transactional
-  //@PreAuthorize("hasRole('LIBRARY_USER')")
-  public Optional<String> getBorrowerOfBook(UUID borrowBookId) {
-    String user = borrowBookRepository.findOneByIdentifier(borrowBookId)
-                      .map(BorrowBookEntity::getUserId)
-                      .orElse(null);
-    return user == null ? Optional.of("") : Optional.of(user);
-  }
+    @Transactional
+    public Optional<String> getBorrowerOfBook(UUID borrowBookId) {
+        String user = borrowBookRepository.findOneByIdentifier(borrowBookId)
+                .map(BorrowBookEntity::getUserId)
+                .orElse(null);
+        return user == null ? Optional.of("") : Optional.of(user);
+    }
 }

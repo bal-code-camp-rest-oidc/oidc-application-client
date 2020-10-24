@@ -20,8 +20,8 @@ def profiles = 'dev'
 bootRun {
     args = ["--spring.profiles.active=" + profiles]
 }
-bootBuildImage{
-    imageName='luechtdiode/oidc-ws-library-frontend'
+bootBuildImage {
+    imageName = 'luechtdiode/oidc-ws-library-frontend'
 }
 
 repositories {
@@ -38,7 +38,6 @@ dependencies {
     //implementation project(':library-api')
     implementation('ch.baloise.oidc:library-api:1.0.0-SNAPSHOT')
 
-    implementation('org.springframework.boot:spring-boot-devtools')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')

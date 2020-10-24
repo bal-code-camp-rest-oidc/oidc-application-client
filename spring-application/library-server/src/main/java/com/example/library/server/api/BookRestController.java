@@ -66,11 +66,12 @@ public class BookRestController {
     @PostMapping("/{bookId}/return")
     public ResponseEntity<BorrowBookResource> returnBookById(
             @PathVariable("bookId") UUID bookId, Principal principal) {
+
         return bookService
                 .findByIdentifier(bookId)
                 .map(
                         b -> {
-                            bookService.returnById(bookId, principal.getName());
+                            bookService.returnById(bookId, principal);
                             return bookService
                                     .findByIdentifier(b.getIdentifier())
                                     .map(bb -> ResponseEntity.ok(borrowBookResourceAssembler.toModel(bb)))
