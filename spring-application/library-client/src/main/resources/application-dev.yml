@@ -33,6 +33,4 @@ logging:
         web: info
 
 library:
-  client:
-    redirect-url: '{baseUrl}'
   server: http://localhost:9090/library-server
