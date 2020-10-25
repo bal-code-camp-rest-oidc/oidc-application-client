@@ -104,7 +104,10 @@ public class BorrowBookResource extends RepresentationModel<BorrowBookResource> 
         }
 
         if (user != null) {
-            if (user.getAuthorities().stream().anyMatch(ga -> ga.getAuthority().equals("SCOPE_library_admin"))) {
+            if (user.getAuthorities().stream().anyMatch(ga -> {
+                System.out.println(ga.getAuthority());
+                return ga.getAuthority().equals("SCOPE_library_admin");
+            })) {
                 return true;
             }
             return borrowedBy.getEmail().equals(user.getEmail());
