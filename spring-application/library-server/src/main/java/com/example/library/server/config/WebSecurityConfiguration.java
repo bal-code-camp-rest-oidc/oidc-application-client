@@ -108,8 +108,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                .oauth2Client()
-                .and()
                 .oauth2ResourceServer()
                 .jwt()
         ;
