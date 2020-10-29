@@ -35,8 +35,8 @@ test {
 }
 
 dependencies {
-    //implementation project(':library-api')
-    implementation('ch.baloise.oidc:library-api:1.0.0-SNAPSHOT')
+    implementation project(':library-api')
+    //implementation('ch.baloise.oidc:library-api:1.0.0-SNAPSHOT')
 
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-oauth2-client')

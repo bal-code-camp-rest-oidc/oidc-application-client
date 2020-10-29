@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ErrorHandler {
-
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<String> handle(AccessDeniedException ex) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN)
