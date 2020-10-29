@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class BorrowBookResource extends RepresentationModel<BorrowBookResource> {
-
     private UUID identifier;
 
     private String isbn;

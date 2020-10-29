@@ -1,6 +1,5 @@
 package com.example.library.server.api.resource.assembler;
 
-import com.example.library.api.Book;
 import com.example.library.api.User;
 import com.example.library.server.api.UserRestController;
 import com.example.library.server.api.resource.UserResource;

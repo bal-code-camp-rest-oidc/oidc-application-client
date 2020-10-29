@@ -24,5 +24,4 @@ public class CustomLogoutSuccessHandler extends
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         return issuerBaseUrl + "/protocol/openid-connect/logout?redirect_uri=" + baseUrl;
     }
-
 }
